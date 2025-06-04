@@ -5,12 +5,14 @@ import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Author {
 
     @AttributeOverride(name="value",column = @Column(name="author_id"))
@@ -23,6 +25,7 @@ public class Author {
         this.memberId = memberId;
         this.name = name;
     }
+
 
     @Override
     public boolean equals(Object o) {

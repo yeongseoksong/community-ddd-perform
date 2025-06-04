@@ -3,6 +3,7 @@ package com.portfolio.community.member.command.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -15,7 +16,7 @@ public class MemberId {
     private String value;
 
     public MemberId() {
-        new MemberId(UUID.randomUUID().toString());
+        this.value=UUID.randomUUID().toString();
     }
 
     private MemberId(String memberId) {

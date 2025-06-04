@@ -20,16 +20,11 @@ public class CreatePostService {
     private final CategoryRepository categoryRepository;
     private final AuthorService authorService;
 
-    public Post create(MemberId memberId, CreatePostRequest createPostRequest) {
-        Author author =authorService.createAuthor(memberId);
-        Category category = categoryRepository.findById(new CategoryId(createPostRequest.getCategoryId())).orElseThrow(EntityNotFoundException::new);
+    public Post createPost(CreatePostRequest createPostRequest) {
+        Author author=createPostRequest.getAuthor();
+        Category category = categoryRepository.findById(createPostRequest.getCategoryId()).orElseThrow(EntityNotFoundException::new);
         PostContent postContent = new PostContent(createPostRequest.getTitle(), createPostRequest.getContent());
-
-        Post post;
-        if(createPostRequest.getIsPremium())
-            post = new PremiumPost(author,postContent,category.getId());
-        else
-            post=new DefaultPost(author,postContent, category.getId());
+        Post post =  new Post(author,postContent,category.getId(),createPostRequest.getIsPremium());
 
         return postRepository.save(post);
     }

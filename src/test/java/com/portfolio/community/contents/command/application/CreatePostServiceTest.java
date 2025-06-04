@@ -28,7 +28,7 @@ class CreatePostServiceTest {
     private CreatePostService createPostService;
 
     @Test
-    public void createPost() {
+    public void createPostPost() {
         MemberId memberId = new MemberId();;
         Author author = new Author(memberId,"Test");
         when(authorService.createAuthor(memberId)).thenReturn(author);
@@ -39,19 +39,16 @@ class CreatePostServiceTest {
         when(categoryRepository.findById(free.getId())).thenReturn(Optional.of(free));
 
 
-        CreatePostRequest createDefaultPost = new CreatePostRequest("post", "content", false, categoryIdStr);
-        Post defaultPost = createPostService.create(memberId, createDefaultPost);
+        CreatePostRequest createDefaultPost = new CreatePostRequest(author,"post", "content", false, categoryIdStr);
+        Post defaultPost = createPostService.createPost( createDefaultPost);
 
 
-        assertThat(defaultPost).isInstanceOf(DefaultPost.class);
+        assertThat(defaultPost).isInstanceOf(Post.class);
         assertThat(defaultPost.getCategoryId()).isEqualTo(categoryId);
         assertThat(defaultPost.getPostContent().getContent()).isEqualTo("content");
         assertThat(defaultPost.getPostContent().getTitle()).isEqualTo("post");
         assertThat(defaultPost.getAuthor()).isEqualTo(author);
 
-        CreatePostRequest createPremiumPost = new CreatePostRequest("post", "content", true, categoryIdStr);
-        Post premiumPost = createPostService.create(memberId, createPremiumPost);
-        assertThat(premiumPost).isInstanceOf(PremiumPost.class);
 
     }
 
