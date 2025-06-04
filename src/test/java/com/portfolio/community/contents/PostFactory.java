@@ -14,7 +14,7 @@ public class PostFactory {
         MemberId testMember = MemberId.of(authorId);
         Author author = new Author(testMember,authorName);
         PostContent postContent = new PostContent(title,content);
-        CategoryId categoryId = new CategoryId(categoryid_);
+        CategoryId categoryId = CategoryId.of(categoryid_);
         Post post = new Post(author, postContent, categoryId,false);
 
         return post;

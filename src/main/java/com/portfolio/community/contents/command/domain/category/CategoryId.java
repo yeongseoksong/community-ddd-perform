@@ -1,5 +1,6 @@
 package com.portfolio.community.contents.command.domain.category;
 
+import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -9,7 +10,6 @@ import lombok.NoArgsConstructor;
 import java.util.Objects;
 
 @Embeddable
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class CategoryId {
 
@@ -22,6 +22,18 @@ public class CategoryId {
 
         this.value = value;
     }
+
+    public CategoryId() {
+        this(NanoIdUtils.randomNanoId(
+                NanoIdUtils.DEFAULT_NUMBER_GENERATOR,
+                NanoIdUtils.DEFAULT_ALPHABET,
+                8));
+    }
+
+    public static CategoryId of(String value) {
+        return new CategoryId(value);
+    }
+
 
 
     @Override

@@ -1,11 +1,9 @@
-package com.portfolio.community.contents.command.application;
+package com.portfolio.community.contents.command.application.post;
 
 
 import com.portfolio.community.contents.command.domain.category.Category;
-import com.portfolio.community.contents.command.domain.category.CategoryId;
 import com.portfolio.community.contents.command.domain.category.CategoryRepository;
 import com.portfolio.community.contents.command.domain.post.*;
-import com.portfolio.community.member.command.domain.MemberId;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

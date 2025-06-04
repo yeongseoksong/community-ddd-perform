@@ -17,7 +17,7 @@ public class TestData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Category testCategory = categoryRepository.save(new Category(new CategoryId("category"),"자유 게시판"));
+        Category testCategory = categoryRepository.save(new Category("자유 게시판"));
 
     }
 }

@@ -1,4 +1,4 @@
-package com.portfolio.community.contents.command.application;
+package com.portfolio.community.contents.command.application.post;
 
 import com.portfolio.community.contents.command.domain.post.*;
 import jakarta.persistence.EntityNotFoundException;

@@ -1,5 +1,7 @@
 package com.portfolio.community.contents.command.application;
 
+import com.portfolio.community.contents.command.application.post.CreatePostRequest;
+import com.portfolio.community.contents.command.application.post.CreatePostService;
 import com.portfolio.community.contents.command.domain.category.Category;
 import com.portfolio.community.contents.command.domain.category.CategoryId;
 import com.portfolio.community.contents.command.domain.category.CategoryRepository;
@@ -33,23 +35,19 @@ class CreatePostServiceTest {
         Author author = new Author(memberId,"Test");
         when(authorService.createAuthor(memberId)).thenReturn(author);
 
-        String categoryIdStr = "free";
-        CategoryId categoryId = new CategoryId(categoryIdStr);
-        Category free = new Category(categoryId, "free-category");
+        Category free = new Category( "free");
         when(categoryRepository.findById(free.getId())).thenReturn(Optional.of(free));
 
 
-        CreatePostRequest createDefaultPost = new CreatePostRequest(author,"post", "content", false, categoryIdStr);
+        CreatePostRequest createDefaultPost = new CreatePostRequest(author,"post", "content", false, free.getId());
         Post defaultPost = createPostService.createPost( createDefaultPost);
 
 
         assertThat(defaultPost).isInstanceOf(Post.class);
-        assertThat(defaultPost.getCategoryId()).isEqualTo(categoryId);
+        assertThat(defaultPost.getCategoryId()).isEqualTo(free.getId());
         assertThat(defaultPost.getPostContent().getContent()).isEqualTo("content");
         assertThat(defaultPost.getPostContent().getTitle()).isEqualTo("post");
         assertThat(defaultPost.getAuthor()).isEqualTo(author);
-
-
     }
 
 }

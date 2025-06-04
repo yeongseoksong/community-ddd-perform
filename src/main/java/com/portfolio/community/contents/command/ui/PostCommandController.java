@@ -1,10 +1,9 @@
 package com.portfolio.community.contents.command.ui;
 
 
-import com.portfolio.community.contents.command.application.CreatePostRequest;
-import com.portfolio.community.contents.command.application.CreatePostService;
-import com.portfolio.community.contents.command.application.EditPostRequest;
-import com.portfolio.community.contents.command.application.PublishPostService;
+import com.portfolio.community.contents.command.application.post.CreatePostRequest;
+import com.portfolio.community.contents.command.application.post.CreatePostService;
+import com.portfolio.community.contents.command.application.post.PublishPostService;
 import com.portfolio.community.contents.command.domain.post.Author;
 import com.portfolio.community.contents.command.domain.post.Post;
 import com.portfolio.community.contents.command.domain.post.PostId;
@@ -30,8 +29,6 @@ public class PostCommandController {
     @Operation(summary = "게시글 생성 api")
     public Post createPost(@RequestBody @Valid  CreatePostRequest createPostRequest) {
 
-
-
         createPostRequest.setAuthor(author);
         return createPostService.createPost(createPostRequest);
     }
@@ -40,11 +37,12 @@ public class PostCommandController {
     @Operation(summary = "게시글 게시 api")
     public Post publishPost(
             @PathVariable Long id,
-            @RequestBody @Valid EditPostRequest editPostRequest) {
+            @RequestBody @Valid CreatePostRequest createPostRequest) {
 
+        createPostRequest.setAuthor(author);
 
         PostId postId = new PostId(id);
-        return publishPostService.publishPost(postId,author,editPostRequest);
+        return publishPostService.publishPost(postId,createPostRequest);
 
     }
 }

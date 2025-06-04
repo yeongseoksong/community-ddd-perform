@@ -1,4 +1,4 @@
-package com.portfolio.community.contents.command.application;
+package com.portfolio.community.contents.command.application.post;
 
 
 import com.portfolio.community.contents.command.domain.category.CategoryId;
@@ -6,19 +6,12 @@ import com.portfolio.community.contents.command.domain.post.Author;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
 public class CreatePostRequest {
 
-
-    @Setter
     private Author author;
 
     @NotBlank
