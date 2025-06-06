@@ -1,6 +1,6 @@
 package com.portfolio.community.contents.command.domain.post;
 
-import com.portfolio.community.resource.ResourceId;
+import com.portfolio.community.resource.domain.ResourceId;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

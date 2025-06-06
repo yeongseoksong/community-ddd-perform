@@ -36,7 +36,15 @@ public enum PostStatus {
             if(!isEditable()) throw new IllegalStateException("Can't edit post status");
             post.changePostStatus(EDITED);
         }
+    },
+
+    HOT(true,false){
+        @Override
+        public void handleStatusEdited(Post post) {
+            if(!isEditable()) throw new IllegalStateException("HOT status post can't be edited");
+        }
     };
+
 
 
     private final boolean visible;

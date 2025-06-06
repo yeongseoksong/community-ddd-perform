@@ -12,13 +12,10 @@ import org.springframework.stereotype.Service;
 public class PublishPostService {
     private final GetPostService getPostService;
 
-    public Post publishPost(PostId postId,  CreatePostRequest createPostRequest) {
-        Post post = getPostService.findById(postId);
-        if(!post.getAuthor().equals(createPostRequest.getAuthor())){
-            throw new IllegalArgumentException("You are not allowed to publish this post");
-        }
-        PostContent postContent = new PostContent(createPostRequest.getTitle(), createPostRequest.getContent());
-        post.publishDraftPost(postContent,createPostRequest.getCategoryId(),createPostRequest.getIsPremium());
+    public Post publishPost(PostId postId,  PostRequest postRequest) {
+        Post post = getPostService.findByIdFromAuthor(postRequest.getAuthor(),postId);
+        PostContent postContent = new PostContent(postRequest.getTitle(), postRequest.getContent());
+        post.publishDraftPost(postContent, postRequest.getCategoryId(), postRequest.getIsPremium());
         return post;
     }
 }

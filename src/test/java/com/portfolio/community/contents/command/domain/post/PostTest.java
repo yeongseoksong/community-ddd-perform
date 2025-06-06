@@ -43,6 +43,14 @@ class PostTest {
         assertThat(post.getStatus()).isEqualTo(PostStatus.PUBLISHED);
     }
 
+    @Test
+    public void 인기_게시글_수정은_불가능하다(){
+        Post post = PostFactory.generate(authorId, authorName, title, content, categoryId);
+        post.changePostStatus(PostStatus.HOT);
+        PostContent newPostContent = new PostContent(title,"content2");
+        assertThatThrownBy(()->
+                post.editPostContent(newPostContent,post.getCategoryId(),post.getIsPremium())).isInstanceOf(IllegalStateException.class);
+    }
 
     @Test
     public void DELETED_게시글_수정은_불가능하다(){

@@ -37,6 +37,10 @@ public class Post extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PostStatus status;
 
+
+    @Enumerated(EnumType.STRING)
+    private PostStatus prevStatus;
+
     private Boolean isPremium;
 
     public Post(Author author, PostContent postContent, CategoryId categoryId,Boolean isPremium) {
@@ -51,6 +55,7 @@ public class Post extends BaseEntity {
         this.viewCount = 0L;
         this.status = PostStatus.DRAFT;
         this.isPremium = isPremium;
+        this.prevStatus=null;
     }
 
     private void setPostContent(PostContent postContent) {
@@ -62,7 +67,12 @@ public class Post extends BaseEntity {
     void changePostStatus(PostStatus newStatus){
         if(newStatus == null)
             throw new IllegalArgumentException("Post status cannot be null");
+        this.prevStatus=this.status;
         this.status = newStatus;
+    }
+
+    private void rollbackPostStatus(){
+        changePostStatus(this.prevStatus);
     }
 
     private void updatePost(PostContent postContent,CategoryId categoryId,Boolean isPremium){
@@ -86,6 +96,24 @@ public class Post extends BaseEntity {
         updatePost(postContent,categoryId,isPremium);
     }
 
+    public void incrementLikeCount(){
+        this.likeCount++;
+        if(verifyIsHotPost())
+            this.changePostStatus(PostStatus.HOT);
+    }
+
+    public void incrementDislikeCount(){
+        this.dislikeCount++;
+        if(!verifyIsHotPost())
+            this.rollbackPostStatus();
+    }
+
+
+
+    private boolean verifyIsHotPost(){
+        final Long HOT_POST_THRESHOLD = 20L;
+        return likeCount-dislikeCount >= HOT_POST_THRESHOLD;
+    }
 
     public void deletePost(){
         changePostStatus(PostStatus.DELETED);

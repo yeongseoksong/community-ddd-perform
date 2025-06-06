@@ -16,6 +16,16 @@ public class GetPostService {
         return post;
     }
 
+    public Post findByIdFromAuthor(Author author,PostId id) {
+        Post post = findById(id);
+        if(!post.getAuthor().equals(author)){
+            throw new IllegalArgumentException("You are not allowed to publish this post");
+        }
+
+        return post;
+    }
+
+
     public Post findByIdAndIsVisible(PostId id) {
         Post post = postRepository.findByIdAndStatusNot(id.getValue(), PostStatus.DELETED).orElseThrow(() -> new EntityNotFoundException("post not found"));
         if(!post.getStatus().isVisible())

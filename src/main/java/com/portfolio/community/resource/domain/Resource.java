@@ -1,4 +1,4 @@
-package com.portfolio.community.resource;
+package com.portfolio.community.resource.domain;
 
 import com.portfolio.community.common.jpa.BaseEntity;
 import jakarta.persistence.*;

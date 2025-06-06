@@ -1,9 +1,8 @@
 package com.portfolio.community.contents.command.application;
 
-import com.portfolio.community.contents.command.application.post.CreatePostRequest;
+import com.portfolio.community.contents.command.application.post.PostRequest;
 import com.portfolio.community.contents.command.application.post.CreatePostService;
 import com.portfolio.community.contents.command.domain.category.Category;
-import com.portfolio.community.contents.command.domain.category.CategoryId;
 import com.portfolio.community.contents.command.domain.category.CategoryRepository;
 import com.portfolio.community.contents.command.domain.post.*;
 import com.portfolio.community.member.command.domain.MemberId;
@@ -39,7 +38,7 @@ class CreatePostServiceTest {
         when(categoryRepository.findById(free.getId())).thenReturn(Optional.of(free));
 
 
-        CreatePostRequest createDefaultPost = new CreatePostRequest(author,"post", "content", false, free.getId());
+        PostRequest createDefaultPost = new PostRequest(author,"post", "content", false, free.getId());
         Post defaultPost = createPostService.createPost( createDefaultPost);
 
 

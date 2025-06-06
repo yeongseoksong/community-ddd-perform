@@ -10,7 +10,7 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
-public class CreatePostRequest {
+public class PostRequest {
 
     private Author author;
 
