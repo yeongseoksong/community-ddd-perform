@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 public class PostRequest {
 
-    private Author author;
+
 
     @NotBlank
     @Schema(description = "게시글 제목",example = "안녕하세요.")

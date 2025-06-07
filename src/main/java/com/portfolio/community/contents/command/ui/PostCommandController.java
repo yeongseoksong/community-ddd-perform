@@ -1,6 +1,7 @@
 package com.portfolio.community.contents.command.ui;
 
 
+import com.portfolio.community.common.response.Resp;
 import com.portfolio.community.contents.command.application.post.*;
 import com.portfolio.community.contents.command.domain.post.Author;
 import com.portfolio.community.contents.command.domain.post.Post;
@@ -22,46 +23,46 @@ public class PostCommandController {
     private final EditPostService editPostService;
     private final DeletePostService deletePostService;
 
-    Author author = new Author(new MemberId(), "test");
+    Author author = new Author(MemberId.of("test"), "test");
 
 
     @PostMapping("/api/members/posts")
     @Operation(summary = "게시글 생성 api")
-    public Post createPost(@RequestBody @Valid PostRequest postRequest) {
+    public Resp<Post> createPost(@RequestBody @Valid PostRequest postRequest) {
 
-        postRequest.setAuthor(author);
-        return createPostService.createPost(postRequest);
+        return Resp.ok(createPostService.createPost(author,postRequest));
     }
 
     @PutMapping("/api/members/posts/{id}/publish")
     @Operation(summary = "게시글 공개 api")
-    public Post publishPost(
+    public Resp<Post> publishPost(
             @PathVariable Long id,
             @RequestBody @Valid PostRequest postRequest) {
 
-        postRequest.setAuthor(author);
+
 
         PostId postId = new PostId(id);
-        return publishPostService.publishPost(postId, postRequest);
+        return Resp.ok(publishPostService.publishPost(postId,author, postRequest));
     }
 
     @PutMapping("/api/members/posts/{id}")
     @Operation(summary = "게시글 수정 api")
-    public Post editPost(
+    public Resp<Post> editPost(
             @PathVariable Long id,
             @RequestBody @Valid PostRequest postRequest) {
 
-        postRequest.setAuthor(author);
+
 
         PostId postId = new PostId(id);
-        return editPostService.editPost(postId, postRequest);
+        return Resp.ok(editPostService.editPost(postId, author,postRequest));
     }
 
     @DeleteMapping("/api/members/posts/{id}")
     @Operation(summary = "게시글 삭제 api")
-    public  void deletePost(@PathVariable Long id) {
+    public  Resp<Void> deletePost(@PathVariable Long id) {
         PostId postId = new PostId(id);
         deletePostService.deletePostByIdFromAuthor(author,postId);
+        return Resp.ok();
     }
 }
 

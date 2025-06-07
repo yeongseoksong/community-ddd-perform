@@ -38,8 +38,8 @@ class CreatePostServiceTest {
         when(categoryRepository.findById(free.getId())).thenReturn(Optional.of(free));
 
 
-        PostRequest createDefaultPost = new PostRequest(author,"post", "content", false, free.getId());
-        Post defaultPost = createPostService.createPost( createDefaultPost);
+        PostRequest createDefaultPost = new PostRequest("post", "content", false, free.getId());
+        Post defaultPost = createPostService.createPost( author,createDefaultPost);
 
 
         assertThat(defaultPost).isInstanceOf(Post.class);

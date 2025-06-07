@@ -67,7 +67,9 @@ public class Post extends BaseEntity {
     void changePostStatus(PostStatus newStatus){
         if(newStatus == null)
             throw new IllegalArgumentException("Post status cannot be null");
-        this.prevStatus=this.status;
+
+        if(this.status != newStatus)
+            this.prevStatus=this.status;
         this.status = newStatus;
     }
 
