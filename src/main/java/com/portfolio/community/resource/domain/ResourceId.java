@@ -1,11 +1,11 @@
 package com.portfolio.community.resource.domain;
 
 
+import com.portfolio.community.common.utils.RandomIdGenerator;
 import jakarta.persistence.Column;
 import lombok.Getter;
 
 import java.util.Objects;
-import java.util.UUID;
 
 @Getter
 public class ResourceId {
@@ -14,7 +14,7 @@ public class ResourceId {
     private String value;
 
     public ResourceId(Long value) {
-        this.value = UUID.randomUUID().toString();
+        this.value = RandomIdGenerator.generate();
     }
 
     @Override

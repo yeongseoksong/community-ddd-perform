@@ -1,11 +1,9 @@
 package com.portfolio.community.contents.command.domain.category;
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
+import com.portfolio.community.common.utils.RandomIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
@@ -24,10 +22,7 @@ public class CategoryId {
     }
 
     public CategoryId() {
-        this(NanoIdUtils.randomNanoId(
-                NanoIdUtils.DEFAULT_NUMBER_GENERATOR,
-                NanoIdUtils.DEFAULT_ALPHABET,
-                8));
+        this(RandomIdGenerator.generate());
     }
 
     public static CategoryId of(String value) {

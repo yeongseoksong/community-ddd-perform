@@ -1,6 +1,6 @@
 package com.portfolio.community.contents.command.domain.post;
 
-import com.portfolio.community.common.jpa.BaseEntity;
+import com.portfolio.community.common.entity.BaseEntity;
 import com.portfolio.community.contents.command.domain.category.CategoryId;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
