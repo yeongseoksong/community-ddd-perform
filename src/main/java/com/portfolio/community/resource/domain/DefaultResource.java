@@ -11,7 +11,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @DiscriminatorValue("default")
 public class DefaultResource  extends  Resource{
-    public DefaultResource(String path, String fileName, StorageType storageType) {
-        super(path, fileName, storageType);
+    public DefaultResource(String path, String fileName, StorageType storageType,String contentType) {
+        super(path, fileName, storageType,contentType);
+    }
+
+    @Override
+    protected boolean isSupportContentType(String contentType) {
+         return contentType != null &&
+                (contentType.equals("application/json") ||
+                        contentType.equals("application/xml") ||
+                        contentType.equals("text/html")||
+                        contentType.equals("text/plain")||
+                        contentType.equals("application/octet-stream"));
+
     }
 }

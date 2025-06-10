@@ -15,7 +15,7 @@ class PersistResourceServiceTest {
     @Autowired
     private ResourceRepository resourceRepository;
 
-   private final LocalStorage localStorage=new LocalStorage();
+   private final LocalStorage localStorage=new LocalStorage("/resources");
 
    @Autowired
    PersistResourceService persistResourceService = new PersistResourceService(localStorage,resourceRepository);

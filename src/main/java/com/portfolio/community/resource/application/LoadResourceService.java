@@ -19,10 +19,7 @@ public class LoadResourceService {
     }
 
     public Resource loadResource(ResourceId id){
-
             Resource resource = resourceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Resource not found"));
-
             return resource;
-
     }
 }

@@ -4,16 +4,14 @@ import com.portfolio.community.common.response.Resp;
 import com.portfolio.community.resource.application.DeleteResourceSerivce;
 import com.portfolio.community.resource.application.LoadResourceService;
 import com.portfolio.community.resource.application.PersistResourceService;
+import com.portfolio.community.resource.domain.Image;
 import com.portfolio.community.resource.domain.Resource;
 import com.portfolio.community.resource.domain.ResourceId;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -33,28 +31,28 @@ public class ResourceController {
     private final PersistResourceService persistResourceService;
 
     @PostMapping()
-    public Resp<Resource> saveResource(MultipartFile multipartFile){
-        Resource resource = persistResourceService.persistMultipartFile(multipartFile);
+    public Resp<Resource> saveResource(@RequestParam("uploadFile") MultipartFile uploadFile){
+        Resource resource = persistResourceService.persistMultipartFile(uploadFile);
         return Resp.ok(resource);
     }
 
-    @PostMapping("/{resourceId}")
-    public void loadResource(@PathVariable ResourceId resourceId, HttpServletResponse response) throws IOException {
-        Resource resource = loadResourceService.loadResource(resourceId);
+    @GetMapping("/{resourceId}")
+    public void loadResource(@PathVariable String resourceId, HttpServletResponse response){
+        Resource resource = loadResourceService.loadResource(new ResourceId(resourceId));
 
         File file = new File (resource.getPath());
-
-        Path path =  Paths.get(file.getPath());
         if (!file.exists())
             throw new IllegalArgumentException("File not found ");
+
         String filename = resource.getFileName();
+        String encodeFileName = URLEncoder.encode(filename, StandardCharsets.UTF_8);
 
-        String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8)
-                .replaceAll("\\+", "%20"); // 공백 처리
 
-        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        response.setHeader(Files.probeContentType(path),
-                "filename=" + encodedFilename);
+        if(resource instanceof Image){
+            response.setHeader("Content-Disposition", "inline");}
+        else {
+            response.setHeader("Content-Disposition", "attachment; filename=" + encodeFileName);
+        }
 
         try (InputStream in = new FileInputStream(file);
              OutputStream out = response.getOutputStream()) {
@@ -68,6 +66,4 @@ public class ResourceController {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }

@@ -3,6 +3,7 @@ import com.portfolio.community.resource.domain.StorageStrategy;
 import com.portfolio.community.resource.domain.StorageType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,8 +17,15 @@ import java.nio.file.*;
 @Getter
 public class LocalStorage implements StorageStrategy {
 
-    private  final Path basePath = Paths.get("C:/resources");
+
+    private final String storagePath;
+    private  final Path basePath;
     private final StorageType  storageType = StorageType.LOCAL;
+
+    public LocalStorage(@Value("${storage.path}") String storagePath) {
+        this.storagePath = storagePath;
+        this.basePath = Paths.get(storagePath);
+    }
 
     @Override
     public void save(byte[] data, String filename) {
@@ -65,15 +73,8 @@ public class LocalStorage implements StorageStrategy {
 
 
 
-    public String getMimeType(String filename) {
-        Path path = basePath.resolve(filename).normalize();
-        try {
-            return Files.probeContentType(path);
-        } catch (IOException e) {
-            log.warn("application/octet-stream");
-            return "application/octet-stream";
-        }
-    }
+
+
     @Override
     public void delete(String filename) {
         try {

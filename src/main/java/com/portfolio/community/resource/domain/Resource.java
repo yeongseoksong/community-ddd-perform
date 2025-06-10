@@ -19,27 +19,46 @@ public abstract  class Resource extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private StorageType storageType;
 
-    @Column(nullable = false)
+
     private String path;
 
-    @Column(length = 30 ,nullable = false )
+
     private String fileName;
 
 
-    @Column(nullable = false)
+    private String url;
+
+
+    private String contentType;
+
+
     @Enumerated(EnumType.STRING)
     private  ResourceState state;
 
 
-    public Resource(String path, String fileName,StorageType storageType) {
-        if(path==null|| fileName ==null || storageType ==null)
-            throw new IllegalArgumentException("Resource path, fileName, storageType  cannot be null");
+    public Resource(String path, String fileName,StorageType storageType,String contentType) {
+        if(path==null|| fileName ==null || storageType ==null || contentType ==null)
+            throw new IllegalArgumentException("Resource path, fileName, storageType, contentType   cannot be null");
 
         this.id= new ResourceId();
         this.path = path;
         this.fileName = fileName;
         this.state = ResourceState.SAVING;
         this.storageType=storageType;
+        this.url= genUrl();
+        setContentType(contentType);
+    }
+
+    private void setContentType(String contentType) {
+        if(!isSupportContentType(contentType))
+            throw new IllegalArgumentException("Content type not supported");
+        this.contentType=contentType;
+    }
+
+    protected abstract boolean isSupportContentType(String contentType);
+
+    private String genUrl() {
+        return this.storageType.getBaseUrl() +"/"+ this.id.getValue();
     }
 
 

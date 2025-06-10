@@ -1,6 +1,7 @@
 spring:
   profiles:
     active: dev
+    include: storage
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
@@ -9,6 +10,10 @@ spring:
         format_sql: true
         show_sql: true
     open-in-view: false
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 5MB
 
 jwt:
   key: your-very-secret-jwt-key-which-should-be-long-enough123213sadasccxvxcvsad

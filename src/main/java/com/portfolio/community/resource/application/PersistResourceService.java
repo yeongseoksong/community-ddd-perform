@@ -24,25 +24,13 @@ public class PersistResourceService {
             String contentType = multipartFile.getContentType();
             storageStrategy.save(multipartFile.getBytes(), multipartFile.getOriginalFilename());
             String path = storageStrategy.calcPath(multipartFile.getOriginalFilename());
-
-            Resource resource;
-
-            if (isImageContentType(contentType)) {
-                resource = new Image(path, multipartFile.getOriginalFilename(),storageStrategy.getStorageType() );
-            } else {
-                resource = new DefaultResource(path, multipartFile.getOriginalFilename(), storageStrategy.getStorageType());
-            }
+            Resource resource= ResourceFactory.generate(path, multipartFile.getOriginalFilename(),contentType,storageStrategy);
             return resourceRepository.save(resource);
+
         } catch (IOException e) {
+
             throw new RuntimeException(e);
         }
-    }
-
-    private boolean isImageContentType(String contentType) {
-        return contentType != null &&
-                (contentType.equals("image/png")
-                        || contentType.equals("image/jpeg")
-                        || contentType.equals("image/jpg"));
     }
 
 }
