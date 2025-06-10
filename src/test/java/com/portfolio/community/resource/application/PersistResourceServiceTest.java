@@ -1,0 +1,37 @@
+package com.portfolio.community.resource.application;
+
+import com.portfolio.community.resource.domain.Resource;
+import com.portfolio.community.resource.domain.ResourceRepository;
+import com.portfolio.community.resource.infra.LocalStorage;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+
+
+@SpringBootTest
+class PersistResourceServiceTest {
+    @Autowired
+    private ResourceRepository resourceRepository;
+
+   private final LocalStorage localStorage=new LocalStorage();
+
+   @Autowired
+   PersistResourceService persistResourceService = new PersistResourceService(localStorage,resourceRepository);
+
+    private final MockMultipartFile file = new MockMultipartFile(
+            "file",                            // 파라미터 이름
+            "test.txt",                        // 원본 파일명
+            "text/plain",                      // 콘텐츠 타입
+            "This is a test file".getBytes()   // 파일 내용
+    );
+    @Test
+    public void test(){
+        Resource save = persistResourceService.persistMultipartFile(file);
+        Assertions.assertThat(save.getFileName()).isEqualTo("test.txt");
+
+        Assertions.assertThat(save.getPath()).isEqualTo(localStorage.getBasePath()+"/"+"test.txt");
+        Assertions.assertThat(save.getStorageType()).isEqualTo(localStorage.getStorageType());
+    }
+}

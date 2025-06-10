@@ -4,4 +4,8 @@ public interface StorageStrategy {
     void save(byte[] data, String filename);
 
     void delete(String filename);
+
+    String calcPath(String filename);
+
+    StorageType getStorageType();
 }

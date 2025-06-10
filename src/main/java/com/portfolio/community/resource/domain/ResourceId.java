@@ -13,10 +13,12 @@ public class ResourceId {
     @Column(unique = true, nullable = false,name="resource_id")
     private String value;
 
-    public ResourceId(Long value) {
+    public ResourceId() {
         this.value = RandomIdGenerator.generate();
     }
-
+    public  ResourceId(String value){
+        this.value=value;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
