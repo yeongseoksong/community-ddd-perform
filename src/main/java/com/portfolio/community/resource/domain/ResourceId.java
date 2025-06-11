@@ -3,11 +3,13 @@ package com.portfolio.community.resource.domain;
 
 import com.portfolio.community.common.utils.RandomIdGenerator;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import lombok.Getter;
 
 import java.util.Objects;
 
 @Getter
+@Embeddable
 public class ResourceId {
 
     @Column(unique = true, nullable = false,name="resource_id")

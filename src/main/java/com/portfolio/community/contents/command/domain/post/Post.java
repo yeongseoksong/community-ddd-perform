@@ -43,6 +43,8 @@ public class Post extends BaseEntity {
 
     private Boolean isPremium;
 
+
+
     public Post(Author author, PostContent postContent, CategoryId categoryId,Boolean isPremium) {
         if(author == null || postContent == null || categoryId == null) {
             throw new IllegalArgumentException("Post author and post content cannot be null");
@@ -58,6 +60,9 @@ public class Post extends BaseEntity {
         this.prevStatus=null;
     }
 
+    public PostId getId(){
+        return new PostId(this.id);
+    }
     private void setPostContent(PostContent postContent) {
         if(postContent == null)
             throw new IllegalArgumentException("Post content cannot be null");

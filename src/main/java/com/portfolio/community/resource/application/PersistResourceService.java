@@ -7,8 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.*;
 
 @Service
+@Transactional
 public class PersistResourceService {
 
     private final StorageStrategy storageStrategy;
@@ -18,7 +20,6 @@ public class PersistResourceService {
         this.storageStrategy = storageStrategy;
         this.resourceRepository= resourceRepository;
     }
-    @Transactional
     public Resource persistMultipartFile(MultipartFile multipartFile){
         try {
             String contentType = multipartFile.getContentType();
@@ -31,6 +32,14 @@ public class PersistResourceService {
 
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Resource> persistMultipartFiles(List<MultipartFile> multipartFiles){
+        List<Resource> resources =new ArrayList<>();
+        for(MultipartFile multipartFile:multipartFiles)
+            resources.add(persistMultipartFile(multipartFile));
+
+        return resources;
     }
 
 }

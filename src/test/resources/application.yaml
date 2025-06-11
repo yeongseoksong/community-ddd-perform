@@ -1,11 +1,16 @@
 spring:
-  profiles:
+
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL
+    url: jdbc:h2:mem:test;MODE=MySQL
     driver-class-name: org.h2.Driver
     username: sa
     password:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
     show-sql: true

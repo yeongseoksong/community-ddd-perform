@@ -1,6 +1,7 @@
 package com.portfolio.community.contents.command.domain.post;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,9 +13,12 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class PostId {
+    @Column(name="post_id")
     private Long value;
 
     public PostId(Long value) {
+        if(value==null)
+            throw new IllegalArgumentException("PostId value cannot be null");
         this.value = value;
     }
 
