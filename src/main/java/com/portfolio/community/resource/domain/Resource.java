@@ -70,4 +70,9 @@ public abstract  class Resource extends BaseEntity {
         if(!this.state.equals(ResourceState.SAVING)) throw new IllegalStateException("Resource status is SAVING, can't delete resource ");
         this.state = ResourceState.DELETE;
     }
+
+    public void setStateActive() {
+        if(!this.state.equals(ResourceState.SAVING)) throw new IllegalStateException("Resource status is SAVING");
+        this.state=ResourceState.ACTIVE;
+    }
 }

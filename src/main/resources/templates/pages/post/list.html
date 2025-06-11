@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/defaultLayout}">
+
+<th:block layout:fragment="Content">
+
+    <div class="grid gap-4">
+            <div th:each="post : ${posts}" class="p-4 bg-white rounded-lg shadow hover:bg-gray-50">
+                <div class="flex gap-4 ">
+                    <p class="text-xl" th:text="${post.viewCount}"></p>
+                    <div>
+                        <a th:href="@{/posts/{id}(id=${post.postId})}" class="text-lg font-semibold text-blue-600 hover:underline"
+                           th:text="${post.title}"></a>
+                        <p class="text-xs text-gray-500 mt-1" th:text="${#temporals.format(post.updatedAt, 'yyyy-MM-dd HH:mm')} +' / ' +${post.authorName}" > </p>
+                        <p class="text-xs text-gray-500 mt-1" th:text="${post.categoryName}"> </p>
+                        <p class="text-xs text-gray-500 mt-1" th:text="'조회수 : ' +${post.viewCount}"></p>
+                    </div>
+            </div>
+        </div>
+</th:block>
+

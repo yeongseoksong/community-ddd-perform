@@ -78,9 +78,10 @@ public class Post extends BaseEntity {
         this.status = newStatus;
     }
 
-    private void rollbackPostStatus(){
+     void rollbackPostStatus(){
         changePostStatus(this.prevStatus);
     }
+
 
     private void updatePost(PostContent postContent,CategoryId categoryId,Boolean isPremium){
         this.postContent = postContent != null ? postContent : this.postContent;
@@ -102,6 +103,7 @@ public class Post extends BaseEntity {
         this.status.handleStatusEdited(this);
         updatePost(postContent,categoryId,isPremium);
     }
+
 
     public void incrementLikeCount(){
         this.likeCount++;

@@ -8,6 +8,9 @@ import com.portfolio.community.contents.command.domain.post.Post;
 import com.portfolio.community.contents.command.domain.post.PostId;
 import com.portfolio.community.member.command.domain.MemberId;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +34,12 @@ public class PostCommandController {
 
     @PostMapping(value = "/api/members/posts",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "게시글 생성 api")
-    public Resp<Post> createPost(@RequestPart(value="post-payload") @Valid PostRequest postPayload,
-                                 @RequestPart(value="attachments") List<MultipartFile> attachments) {
+    public Resp<Post> createPost(
+            @Parameter(description = "게시글 데이터", required = true,
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = PostRequest.class)))
+            @RequestPart(value="post-payload") @Valid PostRequest postPayload,
+                                 @RequestPart(value="attachments",required = false) List<MultipartFile> attachments) {
 
         return Resp.ok(createPostService.createPost(author,postPayload,attachments));
     }

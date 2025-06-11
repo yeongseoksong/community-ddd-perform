@@ -3,6 +3,7 @@ package com.portfolio.community;
 import com.portfolio.community.contents.command.domain.category.Category;
 import com.portfolio.community.contents.command.domain.category.CategoryId;
 import com.portfolio.community.contents.command.domain.category.CategoryRepository;
+import com.portfolio.community.contents.command.domain.post.Post;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -18,6 +19,7 @@ public class TestData implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
 //        Category testCategory = categoryRepository.save(new Category("자유 게시판"));
+
 
     }
 }

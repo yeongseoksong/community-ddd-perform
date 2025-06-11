@@ -2,6 +2,7 @@ package com.portfolio.community.resource.application;
 
 import com.portfolio.community.resource.domain.Resource;
 import com.portfolio.community.resource.domain.ResourceRepository;
+import com.portfolio.community.resource.domain.ResourceState;
 import com.portfolio.community.resource.infra.LocalStorage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,12 +11,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 
 
-@SpringBootTest
+@SpringBootTest(properties = {
+        "storage.path=/tmp/resources"
+})
 class PersistResourceServiceTest {
     @Autowired
     private ResourceRepository resourceRepository;
 
-   private final LocalStorage localStorage=new LocalStorage("/resources");
+    @Autowired
+    private  LocalStorage localStorage;
 
    @Autowired
    PersistResourceService persistResourceService = new PersistResourceService(localStorage,resourceRepository);
@@ -30,7 +34,7 @@ class PersistResourceServiceTest {
     public void test(){
         Resource save = persistResourceService.persistMultipartFile(file);
         Assertions.assertThat(save.getFileName()).isEqualTo("test.txt");
-
+        Assertions.assertThat(save.getState()).isEqualTo(ResourceState.ACTIVE);
         Assertions.assertThat(save.getPath()).isEqualTo(localStorage.getBasePath()+"/"+"test.txt");
         Assertions.assertThat(save.getStorageType()).isEqualTo(localStorage.getStorageType());
     }

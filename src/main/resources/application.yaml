@@ -5,10 +5,11 @@ mybatis:
     call-setters-on-nulls: true
     jdbc-type-for-null: VARCHAR
     default-fetch-size: 500
+
 spring:
   profiles:
     active: dev
-    include: storage
+    include: storage,thymeleaf
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:

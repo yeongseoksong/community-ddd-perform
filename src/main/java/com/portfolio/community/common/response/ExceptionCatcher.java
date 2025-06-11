@@ -44,10 +44,16 @@ public class ExceptionCatcher {
     // 기본 예외(커스텀 제외)
     @ExceptionHandler(value = {RuntimeException.class,Exception.class})
 //    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<?> handleException(RuntimeException e) {
+    public ResponseEntity<?> handleException(Exception e) {
         log.error("handleException() in GlobalExceptionHandler throw Exception : {}", e.getMessage());
         // 일반 예외를 MotherException으로 변환
-        MotherException motherException = new MotherException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        MotherException motherException;
+        if(e instanceof RuntimeException){
+             motherException = new MotherException(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        else{
+         motherException = new MotherException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 //        e.printStackTrace();
         return new ResponseEntity<>(Resp.fail(motherException), motherException.getHttpStatus());
     }

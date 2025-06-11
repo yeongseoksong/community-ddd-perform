@@ -33,10 +33,14 @@ public class CreatePostService {
         Category category = getCategoryService.findById(postRequest.getCategoryId());
         PostContent postContent = new PostContent(postRequest.getTitle(), postRequest.getContent());
         Post post =  new Post(author,postContent,category.getId(), postRequest.getIsPremium());
+        Post save = postRepository.save(post);
+        if(uploadFiles==null || uploadFiles.isEmpty()){
+           return save;
+        }
 
         List<Resource> resources = persistResourceService.persistMultipartFiles(uploadFiles);
 
-        Post save = postRepository.save(post);
+
 
         List<PostResource> postResourceStateList = new ArrayList<>();
         for(Resource resource :resources){

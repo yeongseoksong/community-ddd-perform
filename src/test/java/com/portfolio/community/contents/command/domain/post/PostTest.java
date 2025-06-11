@@ -61,4 +61,31 @@ class PostTest {
                 post.editPostContent(newPostContent,post.getCategoryId(),post.getIsPremium())).isInstanceOf(IllegalStateException.class);
     }
 
+    @Test
+    public void 게시글_상태가_변경되면_이전_게시글_상태를_저장한다(){
+        Post post = PostFactory.generate(authorId, authorName, title, content, categoryId);
+        post.changePostStatus(PostStatus.HOT);
+        assertThat(post.getStatus()).isEqualTo(PostStatus.HOT);
+        assertThat(post.getPrevStatus()).isEqualTo(PostStatus.DRAFT);
+    }
+
+    @Test
+    public void 게시글_좋아요수가_기준치를_넘어서면_HOT_게시글로_변경된다(){
+        Post post = PostFactory.generate(authorId, authorName, title, content, categoryId);
+        assertThat(post.getStatus()).isEqualTo(PostStatus.DRAFT);
+
+        for(int i=0; i<20; i++){
+            post.incrementLikeCount();
+        }
+        assertThat(post.getStatus()).isEqualTo(PostStatus.HOT);
+    }
+
+
+    @Test
+    public void 게시글_상태는_되돌릴_수_있다(){
+        Post post = PostFactory.generate(authorId, authorName, title, content, categoryId);
+        post.changePostStatus(PostStatus.HOT);
+        post.rollbackPostStatus();
+        assertThat(post.getStatus()).isEqualTo(PostStatus.DRAFT);
+    }
 }

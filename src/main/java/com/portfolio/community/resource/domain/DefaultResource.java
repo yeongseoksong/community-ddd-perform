@@ -23,6 +23,5 @@ public class DefaultResource  extends  Resource{
                         contentType.equals("text/html")||
                         contentType.equals("text/plain")||
                         contentType.equals("application/octet-stream"));
-
     }
 }
