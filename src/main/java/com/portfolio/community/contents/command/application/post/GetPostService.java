@@ -10,23 +10,22 @@ import org.springframework.stereotype.Service;
 public class GetPostService {
     private final PostRepository postRepository;
 
-    public Post findById(PostId id) {
+    public Post getById(PostId id) {
         Post post = postRepository.findByIdAndStatusNot(id.getValue(),PostStatus.DELETED).orElseThrow(() -> new EntityNotFoundException("post not found"));
 
         return post;
     }
 
-    public Post findByIdFromAuthor(Author author,PostId id) {
-        Post post = findById(id);
+    public Post getByIdFromAuthor(Author author, PostId id) {
+        Post post = getById(id);
         if(!post.getAuthor().equals(author)){
             throw new IllegalArgumentException("You are not allowed to publish this post");
         }
-
         return post;
     }
 
 
-    public Post findByIdAndIsVisible(PostId id) {
+    public Post getByIdAndIsVisible(PostId id) {
         Post post = postRepository.findByIdAndStatusNot(id.getValue(), PostStatus.DELETED).orElseThrow(() -> new EntityNotFoundException("post not found"));
         if(!post.getStatus().isVisible())
             throw new PostVisibleException();

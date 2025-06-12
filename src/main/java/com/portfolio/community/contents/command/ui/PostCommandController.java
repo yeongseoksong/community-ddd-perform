@@ -44,13 +44,16 @@ public class PostCommandController {
         return Resp.ok(createPostService.createPost(author,postPayload,attachments));
     }
 
+
+
+
+
+
     @PutMapping("/api/members/posts/{id}/publish")
     @Operation(summary = "게시글 공개 api")
     public Resp<Post> publishPost(
             @PathVariable Long id,
             @RequestBody @Valid PostRequest postRequest) {
-
-
 
         PostId postId = new PostId(id);
         return Resp.ok(publishPostService.publishPost(postId,author, postRequest));

@@ -36,12 +36,16 @@ public abstract  class Resource extends BaseEntity {
     private  ResourceState state;
 
 
-    public Resource(String path, String fileName,StorageType storageType,String contentType) {
-        if(path==null|| fileName ==null || storageType ==null || contentType ==null)
-            throw new IllegalArgumentException("Resource path, fileName, storageType, contentType   cannot be null");
+    public String calcFileName(){
+        String[] split = this.fileName.split("\\.");
+        return id.getValue()+"."+split[1];
+    }
+
+    public Resource( String fileName,StorageType storageType,String contentType) {
+        if( fileName ==null || storageType ==null || contentType ==null)
+            throw new IllegalArgumentException("Resource fileName, storageType, contentType   cannot be null");
 
         this.id= new ResourceId();
-        this.path = path;
         this.fileName = fileName;
         this.state = ResourceState.SAVING;
         this.storageType=storageType;
@@ -49,6 +53,18 @@ public abstract  class Resource extends BaseEntity {
         setContentType(contentType);
     }
 
+    public Resource( String path, String fileName,StorageType storageType,String contentType) {
+        this(fileName,storageType,contentType);
+        if(path==null)
+            throw new IllegalArgumentException("Resource path  cannot be null");
+        this.path=path;
+    }
+
+    public void setPath(String path){
+        if(path==null)
+            throw new IllegalArgumentException("Resource path cannot be null");
+        this.path =path;
+    }
     private void setContentType(String contentType) {
         if(!isSupportContentType(contentType))
             throw new IllegalArgumentException("Content type not supported");

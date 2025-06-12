@@ -31,11 +31,11 @@ class PersistResourceServiceTest {
             "This is a test file".getBytes()   // 파일 내용
     );
     @Test
-    public void test(){
+    public void 리소스_저장_서비스는_정상동작한다(){
         Resource save = persistResourceService.persistMultipartFile(file);
         Assertions.assertThat(save.getFileName()).isEqualTo("test.txt");
         Assertions.assertThat(save.getState()).isEqualTo(ResourceState.ACTIVE);
-        Assertions.assertThat(save.getPath()).isEqualTo(localStorage.getBasePath()+"/"+"test.txt");
+        Assertions.assertThat(save.getPath()).isEqualTo(localStorage.getBasePath()+"\\"+save.calcFileName());
         Assertions.assertThat(save.getStorageType()).isEqualTo(localStorage.getStorageType());
     }
 }

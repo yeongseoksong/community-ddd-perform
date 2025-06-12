@@ -11,8 +11,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @DiscriminatorValue("default")
 public class DefaultResource  extends  Resource{
-    public DefaultResource(String path, String fileName, StorageType storageType,String contentType) {
-        super(path, fileName, storageType,contentType);
+    public DefaultResource(String fileName, StorageType storageType,String contentType) {
+        super(fileName, storageType,contentType);
+    }
+
+    public DefaultResource(String path, String fileName, StorageType storageType, String contentType) {
+        super(path, fileName, storageType, contentType);
     }
 
     @Override

@@ -23,11 +23,12 @@ public class PersistResourceService {
     public Resource persistMultipartFile(MultipartFile multipartFile){
         try {
             String contentType = multipartFile.getContentType();
-            String path = storageStrategy.calcPath(multipartFile.getOriginalFilename());
-            Resource resource= ResourceFactory.generate(path, multipartFile.getOriginalFilename(),contentType,storageStrategy);
+            Resource resource= ResourceFactory.generate(multipartFile.getOriginalFilename(),contentType,storageStrategy);
             Resource save = resourceRepository.save(resource);
 
-            storageStrategy.save(multipartFile.getBytes(), multipartFile.getOriginalFilename());
+            storageStrategy.save(multipartFile.getBytes(), resource.calcFileName());
+            save.setPath(storageStrategy.calcPath(resource.calcFileName()).toString());
+
             save.setStateActive();
             return save;
 

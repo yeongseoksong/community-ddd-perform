@@ -15,6 +15,7 @@ public class Category extends BaseEntity {
     @EmbeddedId
     private CategoryId id;
 
+
     @Column(nullable = false, unique = true,length = 50)
     private String name;
 

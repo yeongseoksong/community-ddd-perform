@@ -12,9 +12,14 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("image")
 public  class Image extends Resource {
 
-    public Image(String path, String name, StorageType storageType, String contentType
+    public Image( String name, StorageType storageType, String contentType
     ) {
-        super(path, name,storageType,contentType);
+        super( name,storageType,contentType);
+    }
+
+
+    public Image(String path, String fileName, StorageType storageType, String contentType) {
+        super(path, fileName, storageType, contentType);
     }
 
     @Override

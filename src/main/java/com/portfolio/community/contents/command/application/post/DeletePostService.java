@@ -18,7 +18,7 @@ public class DeletePostService {
     private final GetPostService getPostService;
 
     public void deletePostByIdFromAuthor(Author author,PostId id){
-        Post post = getPostService.findByIdFromAuthor(author,id);
+        Post post = getPostService.getByIdFromAuthor(author,id);
         postRepository.delete(post);
     }
 }

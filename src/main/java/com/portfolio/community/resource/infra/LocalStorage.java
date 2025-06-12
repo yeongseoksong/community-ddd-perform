@@ -1,4 +1,5 @@
 package com.portfolio.community.resource.infra;
+import com.portfolio.community.resource.domain.Resource;
 import com.portfolio.community.resource.domain.StorageStrategy;
 import com.portfolio.community.resource.domain.StorageType;
 import lombok.Getter;
@@ -28,9 +29,8 @@ public class LocalStorage implements StorageStrategy {
     }
 
     @Override
-    public void save(byte[] data, String filename) {
-        Path targetPath = basePath.resolve(filename).normalize();
-
+    public void save(byte[] data, String fileName) {
+        Path targetPath = calcPath(fileName);
         try {
             Files.createDirectories(targetPath.getParent());
 
@@ -92,7 +92,10 @@ public class LocalStorage implements StorageStrategy {
     }
 
     @Override
-    public String calcPath(String filename) {
-        return basePath+"/"+filename;
+    public Path calcPath(String fileName){
+        Path targetPath = basePath.resolve(fileName).normalize();
+
+        return targetPath;
     }
+
 }

@@ -23,15 +23,15 @@ public class ResourceFactory {
     }
 
 
-    public static Resource generate(String path,String fileName, String contentType, StorageStrategy storageStrategy){
+    public static Resource generate(String fileName, String contentType, StorageStrategy storageStrategy){
        Resource resource=null;
         for(Class clazz: clazzs) {
             try {
                 Constructor<Resource> constructor = clazz.getDeclaredConstructor(
-                        String.class, String.class, StorageType.class, String.class
+                       String.class, StorageType.class, String.class
                 );
 
-                resource =constructor.newInstance(path, fileName, storageStrategy.getStorageType(), contentType);
+                resource =constructor.newInstance(fileName, storageStrategy.getStorageType(), contentType);
                 if(resource!=null)
                     break;
 

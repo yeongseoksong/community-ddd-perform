@@ -31,10 +31,14 @@ public class ResourceController {
     private final PersistResourceService persistResourceService;
 
     @PostMapping()
-    public Resp<Resource> saveResource(@RequestParam("uploadFile") MultipartFile uploadFile){
-        Resource resource = persistResourceService.persistMultipartFile(uploadFile);
+    public Resp<Resource> saveResource(@RequestParam("upload") MultipartFile upload,
+                                       @RequestParam("postId")  Long postId){
+        Resource resource = persistResourceService.persistMultipartFile(upload);
         return Resp.ok(resource);
     }
+
+
+
 
     @GetMapping("/{resourceId}")
     public void loadResource(@PathVariable String resourceId, HttpServletResponse response){

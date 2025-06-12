@@ -1,22 +1,20 @@
-<!DOCTYPE html>
-<!--라이브러리 참조 : Thymeleaf & Thymeleaf Layout -->
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head th:replace="~{common/fragments/config :: ConfigFragment}">
+        <title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">공통 타이틀</title>
+    </head>
+    <body class="flex flex-col h-screen w-full">
 
-<!--공통 JS / CSS 영역을 관리하는 환경 영역-->
-<head th:replace="~{common/fragments/config :: ConfigFragment}">
-    <title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">공통 타이틀</title>
-</head>
+    <!-- fixed header -->
+        <header th:replace="~{common/fragments/header :: HeaderFragment}"
+                class="fixed top-0 left-0 w-full bg-white border-b border-gray-200 dark:bg-gray-900 shadow z-50">
+        </header>
 
-<body>
-<!--Header 영역을 참조합니다.-->
-<header th:replace="~{common/fragments/header :: HeaderFragment}"></header>
+        <!-- main content, padding top for fixed header 높이만큼 -->
+        <main class="flex-1 w-4/5 pt-20 mx-auto overflow-auto">
+            <th:block layout:fragment="Content" class="h-full"></th:block>
+        </main>
 
-<!--Content 내용 영역을 참조합니다-->
-<th:block layout:fragment="Content"></th:block>
+        <footer th:replace="~{common/fragments/footer :: FooterFragment}"></footer>
 
-<!--Footer 영역을 참조합니다.-->
-<footer th:replace="~{common/fragments/footer :: FooterFragment}"></footer>
-</body>
+    </body>
 </html>

@@ -17,7 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(properties = {"storage.path=/tmp/resources"})
 class CreatePostServiceTest {
 
     @MockBean

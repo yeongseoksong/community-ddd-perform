@@ -13,7 +13,7 @@ class ResourceFactoryTest {
 
     @Test
     public void 이미지_동적_생성_테스트() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Resource generate = ResourceFactory.generate("/test", "/test.txt", "image/png", new LocalStorage("/"));
+        Resource generate = ResourceFactory.generate("test.txt", "image/png", new LocalStorage("/"));
         Assertions.assertThat(generate).isNotNull();
         Assertions.assertThat(generate).isInstanceOf(Image.class);
 
@@ -22,7 +22,7 @@ class ResourceFactoryTest {
 
     @Test
     public void 일반리소스_동적_생성_테스트() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Resource generate = ResourceFactory.generate("/test", "/test.txt", "__", new LocalStorage("/"));
+        Resource generate = ResourceFactory.generate("test.txt","application/json", new LocalStorage("/"));
         Assertions.assertThat(generate).isNotNull();
         Assertions.assertThat(generate).isInstanceOf(DefaultResource.class);
 

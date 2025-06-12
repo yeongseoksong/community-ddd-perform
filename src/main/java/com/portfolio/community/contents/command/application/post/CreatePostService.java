@@ -28,17 +28,17 @@ public class CreatePostService {
     private final PostResourceRepository postResourceRepository;
     private final PersistResourceService persistResourceService;
 
-    public Post createPost(Author author, PostRequest postRequest, List<MultipartFile> uploadFiles) {
+    public Post createPost(Author author, PostRequest postRequest, List<MultipartFile> attachments) {
 
         Category category = getCategoryService.findById(postRequest.getCategoryId());
         PostContent postContent = new PostContent(postRequest.getTitle(), postRequest.getContent());
         Post post =  new Post(author,postContent,category.getId(), postRequest.getIsPremium());
         Post save = postRepository.save(post);
-        if(uploadFiles==null || uploadFiles.isEmpty()){
+        if(attachments==null || attachments.isEmpty()){
            return save;
         }
 
-        List<Resource> resources = persistResourceService.persistMultipartFiles(uploadFiles);
+        List<Resource> resources = persistResourceService.persistMultipartFiles(attachments);
 
 
 
