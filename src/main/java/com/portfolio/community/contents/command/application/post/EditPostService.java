@@ -17,7 +17,7 @@ public class EditPostService {
     private final GetCategoryService getCategoryService;
 
     public Post editPost(PostId postId, Author author, PostRequest postRequest) {
-        getCategoryService.existById(postRequest.getCategoryId());
+        getCategoryService.assertById(postRequest.getCategoryId());
         Post post =getPostService.getByIdFromAuthor(author,postId);
         PostContent postContent = new PostContent(postRequest.getTitle(), postRequest.getContent());
         post.editPostContent(postContent, postRequest.getCategoryId(), postRequest.getIsPremium());

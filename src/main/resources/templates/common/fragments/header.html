@@ -1,3 +1,5 @@
+
+
 <nav th:fragment="HeaderFragment"
      class="fixed top-0 left-0 w-full bg-white border-b border-gray-200 dark:bg-gray-900 shadow z-50">
     <div class="max-w-screen-xl mx-auto flex items-center justify-between p-4">
@@ -8,39 +10,5 @@
     </div>
 </nav>
 
-<script >
-    console.log('here')
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('here'
-        fetch('/api/categories')
-            .then(res => {
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-                return res.json();
-            })
-            .then(categories => {
-                const ul = document.getElementById('categoryList');
-                ul.innerHTML = ''; // 기존 내용 비우기
 
-                // categories 배열이 비었을 경우 처리 (옵션)
-                if (categories.length === 0) {
-                    const li = document.createElement('li');
-                    li.textContent = '카테고리가 없습니다.';
-                    ul.appendChild(li);
-                    return;
-                }
 
-                categories.forEach(cat => {
-                    const li = document.createElement('li');
-                    const a = document.createElement('a');
-                    a.href = `/category/${cat.categoryId}`;
-                    a.textContent = cat.categoryName;
-                    a.classList.add('hover:text-blue-500', 'cursor-pointer');
-                    li.appendChild(a);
-                    ul.appendChild(li);
-                });
-            })
-            .catch(e => {
-                console.error('Error loading categories:', e);
-            });
-    });
-</script>

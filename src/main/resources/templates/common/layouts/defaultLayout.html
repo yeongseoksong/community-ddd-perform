@@ -1,9 +1,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <head th:replace="~{common/fragments/config :: ConfigFragment}">
         <title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">공통 타이틀</title>
+
     </head>
     <body class="flex flex-col h-screen w-full">
-
     <!-- fixed header -->
         <header th:replace="~{common/fragments/header :: HeaderFragment}"
                 class="fixed top-0 left-0 w-full bg-white border-b border-gray-200 dark:bg-gray-900 shadow z-50">
@@ -17,4 +17,41 @@
         <footer th:replace="~{common/fragments/footer :: FooterFragment}"></footer>
 
     </body>
+
+    <script>
+        window.onload = function () {
+            fetch('/api/categories')
+                .then(res => res.json())
+                .then(response => {
+                    const ul = document.getElementById('categoryList');
+                    if (!ul) {
+                        console.warn('categoryList element not found');
+                        return;
+                    }
+
+                    const categories = response.data;
+
+                    ul.innerHTML = '';
+                    if (categories.length === 0) {
+                        const li = document.createElement('li');
+                        li.textContent = '카테고리가 없습니다.';
+                        ul.appendChild(li);
+                        return;
+                    }
+
+                    categories.forEach(cat => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.href = `/categories/${cat.id.value}/posts`;
+                        a.textContent = cat.name;
+                        a.classList.add('hover:text-blue-500', 'cursor-pointer');
+                        li.appendChild(a);
+                        ul.appendChild(li);
+                    });
+                })
+                .catch(err => {
+                    console.error('카테고리 로딩 중 오류:', err);
+                });
+        };
+    </script>
 </html>

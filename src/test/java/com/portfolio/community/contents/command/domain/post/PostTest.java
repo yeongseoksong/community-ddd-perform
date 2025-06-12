@@ -26,7 +26,7 @@ class PostTest {
     @Test
     public void PUBLISHED_게시글_수정은_상태를_EDITED로_변경한다(){
         Post post = PostFactory.generate(authorId, authorName, title, content, categoryId);
-        post.publishDraftPost(post.getPostContent(),post.getCategoryId(),post.getIsPremium());
+        post.publishDraftPost();
         PostContent newPostContent = new PostContent(title,"content2");
         post.editPostContent(newPostContent,post.getCategoryId(),post.getIsPremium());
         assertThat(post.getPostContent()).isEqualTo(newPostContent);
@@ -38,7 +38,7 @@ class PostTest {
         Post post = PostFactory.generate(authorId, authorName, title, content, categoryId);
         PostContent newPostContent = new PostContent(title,"content2");
 
-        post.publishDraftPost(newPostContent,post.getCategoryId(),post.getIsPremium());
+        post.publishDraftPost();
         assertThat(post.getPostContent()).isEqualTo(newPostContent);
         assertThat(post.getStatus()).isEqualTo(PostStatus.PUBLISHED);
     }

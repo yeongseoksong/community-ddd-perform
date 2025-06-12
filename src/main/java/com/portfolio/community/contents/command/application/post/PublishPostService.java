@@ -12,13 +12,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class PublishPostService {
     private final GetPostService getPostService;
-    private final GetCategoryService getCategoryService;
 
-    public Post publishPost(PostId postId,  Author author,PostRequest postRequest) {
-        getCategoryService.existById(postRequest.getCategoryId());
+
+    public Post publishPost(PostId postId,  Author author) {
+
         Post post = getPostService.getByIdFromAuthor(author,postId);
-        PostContent postContent = new PostContent(postRequest.getTitle(), postRequest.getContent());
-        post.publishDraftPost(postContent, postRequest.getCategoryId(), postRequest.getIsPremium());
+        post.publishDraftPost();
         return post;
     }
 }

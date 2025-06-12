@@ -3,10 +3,12 @@ package com.portfolio.community.contents.command.ui;
 
 import com.portfolio.community.common.response.Resp;
 import com.portfolio.community.contents.command.application.post.*;
+import com.portfolio.community.contents.command.domain.category.CategoryId;
 import com.portfolio.community.contents.command.domain.post.Author;
 import com.portfolio.community.contents.command.domain.post.Post;
 import com.portfolio.community.contents.command.domain.post.PostId;
 import com.portfolio.community.member.command.domain.MemberId;
+import com.portfolio.community.resource.domain.Resource;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,37 +29,50 @@ public class PostCommandController {
     private final PublishPostService publishPostService;
     private final EditPostService editPostService;
     private final DeletePostService deletePostService;
+    private final PersistPostResourceService persistPostResourceService;
 
 
     Author author = new Author(MemberId.of("test"), "test");
 
+    @PostMapping(value = "/api/members/categories/{categoryId}/posts")
+    @Operation(summary = "게시글 초기 api")
+    public Resp<Post> createPost(@PathVariable String  categoryId) {
 
-    @PostMapping(value = "/api/members/posts",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "게시글 생성 api")
-    public Resp<Post> createPost(
-            @Parameter(description = "게시글 데이터", required = true,
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = PostRequest.class)))
-            @RequestPart(value="post-payload") @Valid PostRequest postPayload,
-                                 @RequestPart(value="attachments",required = false) List<MultipartFile> attachments) {
-
-        return Resp.ok(createPostService.createPost(author,postPayload,attachments));
+        CategoryId categoryId_ = CategoryId.of(categoryId);
+        return Resp.ok(createPostService.createInitialPost(author,categoryId_));
     }
 
 
 
+//    @PostMapping(value = "/api/members/posts",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    @Operation(summary = "게시글 생성 api")
+//    public Resp<Post> createPost(
+//            @RequestPart(value="post-payload") @Valid PostRequest postPayload,
+//                                 @RequestPart(value="attachments",required = false) List<MultipartFile> attachments) {
+//
+//        return Resp.ok(createPostService.createPost(author,postPayload,attachments));
+//    }
 
+
+    @PostMapping(value = "/api/members/posts/{id}/resources")
+    @Operation(summary = "게시글 하위 단일 리소스 저장 api")
+    public Resp<Resource> persistPostResources(
+            @PathVariable Long id,
+            MultipartFile upload) {
+        return Resp.ok(persistPostResourceService.validatePostAndPersistImage(author,new PostId(id)
+                ,upload));
+    }
 
 
     @PutMapping("/api/members/posts/{id}/publish")
     @Operation(summary = "게시글 공개 api")
     public Resp<Post> publishPost(
-            @PathVariable Long id,
-            @RequestBody @Valid PostRequest postRequest) {
+            @PathVariable Long id) {
 
         PostId postId = new PostId(id);
-        return Resp.ok(publishPostService.publishPost(postId,author, postRequest));
+        return Resp.ok(publishPostService.publishPost(postId,author));
     }
+
 
     @PutMapping("/api/members/posts/{id}")
     @Operation(summary = "게시글 수정 api")
@@ -68,6 +83,7 @@ public class PostCommandController {
         PostId postId = new PostId(id);
         return Resp.ok(editPostService.editPost(postId, author,postRequest));
     }
+
 
     @DeleteMapping("/api/members/posts/{id}")
     @Operation(summary = "게시글 삭제 api")

@@ -43,9 +43,14 @@ public class Post extends BaseEntity {
 
     private Boolean isPremium;
 
+    public Post(  Author author,CategoryId categoryId) {
+        if(author==null || categoryId==null)
+            throw new IllegalArgumentException("Post author, categoryId  cannot be null");
+        this.author =author;
+        this.categoryId=categoryId;
+    }
 
-
-    public Post(Author author, PostContent postContent, CategoryId categoryId,Boolean isPremium) {
+    public Post(Author author, PostContent postContent, CategoryId categoryId, Boolean isPremium) {
         if(author == null || postContent == null || categoryId == null) {
             throw new IllegalArgumentException("Post author and post content cannot be null");
         }
@@ -90,12 +95,11 @@ public class Post extends BaseEntity {
     }
 
 
-    public void publishDraftPost(PostContent postContent,CategoryId categoryId,Boolean isPremium){
+    public void publishDraftPost(){
         if(this.status != PostStatus.DRAFT)
             throw new IllegalStateException("Post status is not DRAFT");
 
         this.changePostStatus(PostStatus.PUBLISHED);
-        updatePost(postContent,categoryId,isPremium);
     }
 
 

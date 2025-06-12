@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 public class GetCategoryService {
     private final CategoryRepository categoryRepository;
 
-    public Category findById(CategoryId categoryId){
+    public Category getById(CategoryId categoryId){
        return categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new
        );
     }
 
-    public void existById(CategoryId categoryId){
+    public void assertById(CategoryId categoryId){
         if( !categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException();
     }

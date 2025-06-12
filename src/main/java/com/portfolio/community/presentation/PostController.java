@@ -1,6 +1,7 @@
 package com.portfolio.community.presentation;
 
-import com.portfolio.community.contents.command.domain.post.Post;
+import com.portfolio.community.contents.command.application.category.GetCategoryService;
+import com.portfolio.community.contents.command.domain.category.CategoryId;
 import com.portfolio.community.contents.query.PostMapper;
 import com.portfolio.community.contents.query.PostSummaryVO;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/posts")
+@RequestMapping("/categories/{categoryId}/posts")
 @RequiredArgsConstructor
 public class PostController {
+    private final GetCategoryService categoryService;
     private final PostMapper postMapper;
 
     @GetMapping()
-    public String postList(Model model) {
+    public String postListPerCategory(@PathVariable String categoryId, Model model) {
         List<PostSummaryVO> posts = postMapper.getPostList();
 
         model.addAttribute("posts",posts);
@@ -32,7 +34,8 @@ public class PostController {
     }
 
     @GetMapping("/write")
-    public String createPost(Model model){
+    public String createPost(@PathVariable String categoryId,Model model){
+
 
         return "pages/post/write";
     }
