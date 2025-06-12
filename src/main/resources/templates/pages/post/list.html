@@ -7,11 +7,16 @@
 <th:block layout:fragment="Content">
 
     <div class="grid gap-4">
+            <button type="button"
+                    onclick="routePostInit()"
+                    class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">글 쓰기</button>
+
             <div th:each="post : ${posts}" class="p-4 bg-white rounded-lg shadow hover:bg-gray-50">
                 <div class="flex gap-4 ">
                     <p class="text-xl" th:text="${post.viewCount}"></p>
                     <div>
-                        <a th:href="@{/posts/{id}(id=${post.postId})}" class="text-lg font-semibold text-blue-600 hover:underline"
+                        <a th:href="@{/posts/{id}(id=${post.postId})}"
+                           class="text-lg font-semibold text-blue-600 hover:underline"
                            th:text="${post.title}"></a>
                         <p class="text-xs text-gray-500 mt-1" th:text="${#temporals.format(post.updatedAt, 'yyyy-MM-dd HH:mm')} +' / ' +${post.authorName}" > </p>
                         <p class="text-xs text-gray-500 mt-1" th:text="${post.categoryName}"> </p>
@@ -19,5 +24,14 @@
                     </div>
             </div>
         </div>
+    <div>
+        <script th:src="@{/js/Common.js}"> </script>
+        <script>
+            const categoryId = extractCategoryId();
+            const routePostInit = ()=>{
+                window.location.href=`/categories/${categoryId}/posts/init`
+            }
+        </script>
 </th:block>
+
 

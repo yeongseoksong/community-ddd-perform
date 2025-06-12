@@ -16,10 +16,10 @@ import java.util.Objects;
 @Embeddable
 public class PostContent {
 
-    @Column(nullable = false, length = 100)
+    @Column
     private String title;
 
-    @Column(nullable = false)
+    @Column
     private String content;
 
     public PostContent(String title, String content) {

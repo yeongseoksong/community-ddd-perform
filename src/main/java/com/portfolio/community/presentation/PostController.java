@@ -1,9 +1,15 @@
 package com.portfolio.community.presentation;
 
 import com.portfolio.community.contents.command.application.category.GetCategoryService;
+import com.portfolio.community.contents.command.application.post.CreatePostService;
+import com.portfolio.community.contents.command.application.post.GetPostService;
 import com.portfolio.community.contents.command.domain.category.CategoryId;
+import com.portfolio.community.contents.command.domain.post.Author;
+import com.portfolio.community.contents.command.domain.post.Post;
+import com.portfolio.community.contents.command.domain.post.PostId;
 import com.portfolio.community.contents.query.PostMapper;
 import com.portfolio.community.contents.query.PostSummaryVO;
+import com.portfolio.community.member.command.domain.MemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
     private final GetCategoryService categoryService;
+    private final CreatePostService createPostService;
+    private final GetPostService getPostService;
     private final PostMapper postMapper;
+
+    final Author author = new Author(MemberId.of("test"), "test");
+
 
     @GetMapping()
     public String postListPerCategory(@PathVariable String categoryId, Model model) {
@@ -33,11 +44,20 @@ public class PostController {
         return "pages/post/detail";
     }
 
-    @GetMapping("/write")
-    public String createPost(@PathVariable String categoryId,Model model){
+    @GetMapping("/init")
+    public String createPost(@PathVariable String categoryId){
+        Post initialPost = createPostService.createInitialPost(author, new CategoryId(categoryId));
 
 
-        return "pages/post/write";
+        return "redirect:/categories/"+categoryId+"/posts/"+initialPost.getId().getValue()+"/edit";
+
+    }
+
+    @GetMapping("/{postId}/edit")
+    public String editPost(@PathVariable String categoryId,@PathVariable Long postId, Model model){
+
+        model.addAttribute("post",getPostService.getByIdFromAuthor(author,new PostId(postId)));
+        return "pages/post/edit";
     }
 
 }

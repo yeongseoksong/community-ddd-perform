@@ -44,6 +44,6 @@ class LocalStorageTest {
     @Test
     void calcPath(){
         Path path = localStorage.calcPath(testFilename);
-        assertEquals(path.toString(),localStorage.getBasePath()+"\\"+testFilename);
+        assertEquals(path.toString(),localStorage.getBasePath()+"/"+testFilename);
     }
 }

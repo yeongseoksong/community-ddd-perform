@@ -43,11 +43,15 @@ public class Post extends BaseEntity {
 
     private Boolean isPremium;
 
-    public Post(  Author author,CategoryId categoryId) {
+    public Post(Author author,CategoryId categoryId) {
         if(author==null || categoryId==null)
             throw new IllegalArgumentException("Post author, categoryId  cannot be null");
         this.author =author;
         this.categoryId=categoryId;
+        this.status=PostStatus.DRAFT;
+        this.viewCount=0L;
+        this.likeCount=0L;
+        this.dislikeCount=0L;
     }
 
     public Post(Author author, PostContent postContent, CategoryId categoryId, Boolean isPremium) {

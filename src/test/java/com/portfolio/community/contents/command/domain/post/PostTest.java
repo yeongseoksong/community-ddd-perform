@@ -2,6 +2,8 @@ package com.portfolio.community.contents.command.domain.post;
 
 
 import com.portfolio.community.contents.PostFactory;
+import com.portfolio.community.contents.command.domain.category.CategoryId;
+import com.portfolio.community.member.command.domain.MemberId;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
@@ -13,6 +15,17 @@ class PostTest {
     private final String content = "random content";
     private final String categoryId = "random category id";
 
+    @Test
+    public void 게시글_생성은_일부정보로_가능하며_상태는_DRAFT(){
+        Author author = new Author(MemberId.of(authorId),authorName);
+        CategoryId categoryId_ = new CategoryId();
+        Post post = new Post(author, categoryId_);
+        assertThat(post.getAuthor()).isEqualTo(author);
+        assertThat(post.getCategoryId()).isEqualTo(categoryId_);
+        assertThat(post.getPostContent()).isNull();
+        assertThat(post.getDislikeCount()).isEqualTo(0);
+        assertThat(post.getLikeCount()).isEqualTo(0);
+    }
 
     @Test
     public void DRAFT_게시글_수정은_상태를_DRAFT로_유지한다(){
@@ -33,15 +46,6 @@ class PostTest {
         assertThat(post.getStatus()).isEqualTo(PostStatus.EDITED);
     }
 
-    @Test
-    public void PUBLISH와_게시글_수정을_동시에_할_수_있다(){
-        Post post = PostFactory.generate(authorId, authorName, title, content, categoryId);
-        PostContent newPostContent = new PostContent(title,"content2");
-
-        post.publishDraftPost();
-        assertThat(post.getPostContent()).isEqualTo(newPostContent);
-        assertThat(post.getStatus()).isEqualTo(PostStatus.PUBLISHED);
-    }
 
     @Test
     public void 인기_게시글_수정은_불가능하다(){

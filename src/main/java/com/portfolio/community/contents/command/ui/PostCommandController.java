@@ -32,7 +32,7 @@ public class PostCommandController {
     private final PersistPostResourceService persistPostResourceService;
 
 
-    Author author = new Author(MemberId.of("test"), "test");
+    final Author author = new Author(MemberId.of("test"), "test");
 
     @PostMapping(value = "/api/members/categories/{categoryId}/posts")
     @Operation(summary = "게시글 초기 api")
@@ -42,16 +42,6 @@ public class PostCommandController {
         return Resp.ok(createPostService.createInitialPost(author,categoryId_));
     }
 
-
-
-//    @PostMapping(value = "/api/members/posts",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    @Operation(summary = "게시글 생성 api")
-//    public Resp<Post> createPost(
-//            @RequestPart(value="post-payload") @Valid PostRequest postPayload,
-//                                 @RequestPart(value="attachments",required = false) List<MultipartFile> attachments) {
-//
-//        return Resp.ok(createPostService.createPost(author,postPayload,attachments));
-//    }
 
 
     @PostMapping(value = "/api/members/posts/{id}/resources")

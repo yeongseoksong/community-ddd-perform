@@ -35,7 +35,7 @@ class PersistResourceServiceTest {
         Resource save = persistResourceService.persistMultipartFile(file);
         Assertions.assertThat(save.getFileName()).isEqualTo("test.txt");
         Assertions.assertThat(save.getState()).isEqualTo(ResourceState.ACTIVE);
-        Assertions.assertThat(save.getPath()).isEqualTo(localStorage.getBasePath()+"\\"+save.calcFileName());
+        Assertions.assertThat(save.getPath()).isEqualTo(localStorage.getBasePath()+"/"+save.calcFileName());
         Assertions.assertThat(save.getStorageType()).isEqualTo(localStorage.getStorageType());
     }
 }
