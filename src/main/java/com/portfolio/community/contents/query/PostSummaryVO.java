@@ -14,4 +14,6 @@ public class PostSummaryVO {
     String categoryName;
     String categoryId;
     String authorName;
+    Boolean isPremium;
+
 }

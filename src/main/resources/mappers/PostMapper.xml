@@ -26,19 +26,24 @@
 
     <select id="getPostWithResources" resultMap="PostWithResources" parameterType="long">
         select * from post p
-        left join post_resource pr  on p.post_id =pr.post_id and p.post_id= #{postId}
-        inner join resource r on r.resource_id = pr.resource_id and r.state ='SAVING'
+        left join post_resource pr  on p.post_id =pr.post_id
+        left join resource r on r.resource_id = pr.resource_id and r.state in ('ACTIVE')
+        where p.status in ('PUBLISHED','EDITED','HOT')
+        and p.post_id=#{postId}
     </select>
 
     <select id="getPostList" resultType="com.portfolio.community.contents.query.PostSummaryVO">
         select p.post_id,
-               p.updated_at,
-               p.like_count,
-               p.view_count,
-               p.title,
-               p.category_id,
-               p.author_name,
-               c.name as category_name
-        from post p inner join category c where p.status in ('PUBLISHED','EDITED','HOT');
+            p.is_premium,
+            p.updated_at,
+            p.like_count,
+            p.view_count,
+            p.title,
+            p.category_id,
+            p.author_name,
+            c.name as category_name
+        from post p join category c on p.category_id =c.category_id
+        where p.status in ('PUBLISHED','EDITED','HOT')
+        order by p.created_at desc;
     </select>
 </mapper>

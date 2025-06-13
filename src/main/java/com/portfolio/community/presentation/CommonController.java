@@ -11,4 +11,9 @@ public class CommonController {
     public String indexPage(){
         return "pages/index";
     }
+
+    @RequestMapping("/mypage")
+    public String myPage(){
+        return "pages/member/myPage";
+    }
 }

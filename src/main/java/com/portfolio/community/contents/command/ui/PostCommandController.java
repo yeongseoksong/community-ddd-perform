@@ -10,16 +10,12 @@ import com.portfolio.community.contents.command.domain.post.PostId;
 import com.portfolio.community.member.command.domain.MemberId;
 import com.portfolio.community.resource.domain.Resource;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @Tag(name="게시글 rest api",description = "게시글 rest api")
@@ -36,7 +32,7 @@ public class PostCommandController {
 
     @PostMapping(value = "/api/members/categories/{categoryId}/posts")
     @Operation(summary = "게시글 초기 api")
-    public Resp<Post> createPost(@PathVariable String  categoryId) {
+    public Resp<Post> createInitialPost(@PathVariable String  categoryId) {
 
         CategoryId categoryId_ = CategoryId.of(categoryId);
         return Resp.ok(createPostService.createInitialPost(author,categoryId_));
@@ -58,20 +54,19 @@ public class PostCommandController {
     @Operation(summary = "게시글 공개 api")
     public Resp<Post> publishPost(
             @PathVariable Long id) {
-
         PostId postId = new PostId(id);
         return Resp.ok(publishPostService.publishPost(postId,author));
     }
 
 
-    @PutMapping("/api/members/posts/{id}")
-    @Operation(summary = "게시글 수정 api")
+    @PutMapping("/api/members/posts/{postId}")
+    @Operation(summary = "게시글 편집 api")
     public Resp<Post> editPost(
-            @PathVariable Long id,
+            @PathVariable Long postId,
             @RequestBody @Valid PostRequest postRequest) {
 
-        PostId postId = new PostId(id);
-        return Resp.ok(editPostService.editPost(postId, author,postRequest));
+        PostId postId_ = new PostId(postId);
+        return Resp.ok(editPostService.editPost(postId_, author,postRequest));
     }
 
 

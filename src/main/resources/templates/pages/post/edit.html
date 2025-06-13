@@ -1,65 +1,294 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layouts/defaultLayout}">
 
-
-
 <th:block layout:fragment="Content">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+            <!-- 헤더 섹션 -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-6">
+                <h1 class="text-2xl font-bold text-white" th:text="${post?.id.value != null ? '게시물 수정' : '새 게시물 작성'}">게시물 작성</h1>
+                <p class="text-blue-100 mt-2">
+                    <span th:if="${post?.status.name()=='DRAFT'}">현재 상태: 임시저장</span>
+                    <span th:if="${post?.status.name()=='PUBLISHED'}">현재 상태: 게시됨</span>
+                </p>
+            </div>
+
+            <!-- 폼 섹션 -->
+            <div class="p-6">
+                <form id="postForm" method="PUT" class="flex flex-col gap-6">
+                    <!-- 숨겨진 필드 -->
+                    <input type="hidden" name="postId" th:value="${post?.id.value}" readonly/>
+                    <input type="hidden" name="categoryId" th:value="${post?.categoryId.value}" readonly/>
+
+                    <!-- 프리미엄 체크박스 -->
+                    <div class="flex items-center">
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="isPremium" th:checked="${post?.isPremium}"
+                                   class="sr-only peer">
+                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">유료 게시물</span>
+                        </label>
+                    </div>
+
+                    <!-- 제목 입력 -->
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">제목</label>
+                        <input type="text"
+                               id="title"
+                               name="title"
+                               placeholder="제목을 입력하세요"
+                               th:value="${post?.postContent?.title?:''}"
+                               required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                    </div>
+
+                    <!-- 에디터 영역 -->
+                    <div>
+                        <label for="editor" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">내용</label>
+                        <div class="border border-gray-300 rounded-md dark:border-gray-600 overflow-hidden">
+                            <textarea id="editor" class="w-full" placeholder="내용을 입력하세요" th:text="${post?.postContent?.content?:''}"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- 파일 업로드 -->
+                    <div>
+                        <label for="fileInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">첨부파일</label>
+                        <div class="flex items-center justify-center w-full">
+                            <label for="fileInput" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">클릭하여 파일 업로드</span></p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF, PDF 등</p>
+                                </div>
+                                <input id="fileInput" name="files" type="file" class="hidden" multiple />
+                            </label>
+                        </div>
+                        <div id="fileList" class="mt-2 text-sm text-gray-500 dark:text-gray-400"></div>
+                    </div>
+
+                    <!-- 버튼 영역 -->
+                    <div class="flex gap-4 mt-4">
+                        <button type="button"
+                                id="publishBtn"
+                                th:if="${post?.status.name()=='DRAFT'}"
+                                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            등록
+                        </button>
+                        <button type="button"
+                                id="editBtn"
+                                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 rounded-lg dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 transition-colors"
+                                th:text="${post?.status.name()=='DRAFT' ? '저장' : '편집'}">
+                            저장
+                        </button>
+                        <button type="button"
+                                id="cancelBtn"
+                                onclick="history.back()"
+                                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-100 rounded-lg dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:focus:ring-gray-700 transition-colors">
+                            취소
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <style>
+        /* CKEditor 스타일 커스터마이징 */
         .ck-editor__editable_inline {
             min-height: 50vh;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+            border-color: #e5e7eb;
+        }
+
+        .dark .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+            border-color: #4b5563;
+            background-color: #374151;
+            color: #f3f4f6;
+        }
+
+        .dark .ck.ck-toolbar {
+            background-color: #1f2937;
+            border-color: #4b5563;
+        }
+
+        .dark .ck.ck-button {
+            color: #e5e7eb;
+        }
+
+        .dark .ck.ck-button.ck-on {
+            background-color: #2563eb;
         }
     </style>
-    <form id="postForm" method="post" class="flex flex-col gap-4 h-full">
-            <input type="text" name="title" placeholder="내용 입력" required  />
-        <textarea id="editor" class="flex-1" placeholder="내용 입력"></textarea>
-        <div class="flex gap-4">
-            <button type="button" class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">등록</button>
-            <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">저장</button>
-        </div>
-    </form>
 
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
-    <script th:src="@{/js/UploadAdapter.js}"> </script>
+    <script th:src="@{/js/UploadAdapter.js}"></script>
 
     <script>
-         ClassicEditor
+        // 파일 목록 표시 기능
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+
+            if (this.files.length > 0) {
+                const list = document.createElement('ul');
+                list.className = 'list-disc pl-5 space-y-1 mt-2';
+
+                Array.from(this.files).forEach(file => {
+                    const item = document.createElement('li');
+                    item.className = 'text-sm';
+                    item.textContent = `${file.name} (${formatFileSize(file.size)})`;
+                    list.appendChild(item);
+                });
+
+                fileList.appendChild(list);
+            }
+        });
+
+        // 파일 크기 포맷팅
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // 카테고리 ID 추출 함수
+        function extractCategoryId() {
+            const form = document.getElementById('postForm');
+            return form.categoryId.value;
+        }
+
+        // 게시물 저장 함수
+<!--        function savePost(postId, content) {-->
+<!--            const form = document.getElementById('postForm');-->
+<!--            const formData = new FormData();-->
+
+<!--            formData.append('title', form.title.value);-->
+<!--            formData.append('content', content);-->
+<!--            formData.append('isPremium', form.isPremium.checked);-->
+
+<!--            // 파일 추가-->
+<!--            const fileInput = document.getElementById('fileInput');-->
+<!--            if (fileInput.files.length > 0) {-->
+<!--                for (let i = 0; i < fileInput.files.length; i++) {-->
+<!--                    formData.append('files', fileInput.files[i]);-->
+<!--                }-->
+<!--            }-->
+
+<!--            return fetch(`/api/members/posts/${postId}`, {-->
+<!--                method: 'PUT',-->
+<!--                body: formData-->
+<!--            })-->
+<!--            .then(response => {-->
+<!--                if (!response.ok) throw new Error('저장 실패');-->
+<!--                return response.json();-->
+<!--            });-->
+<!--        }-->
+
+        // CKEditor 초기화
+        ClassicEditor
             .create(document.querySelector('#editor'), {
                 extraPlugins: [uploadAdapterPlugin]
             })
-             .then(editor => {
-                 window.editorInstance = editor;
+            .then(editor => {
+                window.editorInstance = editor;
+            })
+            .catch(console.error);
 
+        // 게시 버튼 이벤트
+        const publishBtn = document.getElementById('publishBtn');
+        if (publishBtn) {
+            publishBtn.addEventListener('click', function () {
+                const form = document.getElementById('postForm');
+                const postId = form.postId.value;
+                const categoryId = extractCategoryId();
 
-             })
-             .catch(console.error);
+                savePost(postId, editorInstance.getData())
+                    .then(() => {
+                        // 저장 후 등록 요청
+                        return fetch(`/api/members/posts/${postId}/publish`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('등록 실패');
+                        return response.json();
+                    })
+                    .then(data => {
+                        showNotification('성공', '게시물이 성공적으로 등록되었습니다!', 'success');
+                        setTimeout(() => {
+                            window.location.href = `/categories/${categoryId}/posts`;
+                        }, 1500);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        showNotification('오류', '오류 발생: ' + error.message, 'error');
+                    });
+            });
+        }
 
-         // 폼 제출 처리
-         document.getElementById('postForm').addEventListener('submit', function (e) {
-             e.preventDefault();
+        // 편집/저장 버튼 이벤트
+        document.getElementById('editBtn').addEventListener('click', function () {
+            const form = document.getElementById('postForm');
+            const postId = form.postId.value;
 
-             const formData = {
-                 title: this.title.value,
-                 content: editorInstance.getData()
-             };
+            savePost(postId, editorInstance.getData())
+                .then(() => {
+                    showNotification('성공', '게시물이 저장되었습니다.', 'success');
+                })
+                .catch(error => {
+                    showNotification('오류', '오류 발생: ' + error.message, 'error');
+                });
+        });
 
-             fetch('/posts', {
-                 method: 'POST',
-                 headers: {
-                     'Content-Type': 'application/json'
-                 },
-                 body: JSON.stringify(formData)
-             })
-             .then(response => {
-                 if (response.ok) {
-                     alert('게시글이 등록되었습니다.');
-                     window.location.href = '/posts'; // 목록으로 이동
-                 } else {
-                     alert('등록 실패');
-                 }
-             });
-         });
+        // 알림 표시 함수
+        function showNotification(title, message, type) {
+            const notificationContainer = document.createElement('div');
+            notificationContainer.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${type === 'success' ? 'bg-green-100 border-l-4 border-green-500' : 'bg-red-100 border-l-4 border-red-500'}`;
+
+            notificationContainer.innerHTML = `
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        ${type === 'success'
+                            ? '<svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
+                            : '<svg class="w-5 h-5 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>'
+                        }
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium ${type === 'success' ? 'text-green-700' : 'text-red-700'}">${title}</h3>
+                        <div class="mt-1 text-sm ${type === 'success' ? 'text-green-600' : 'text-red-600'}">${message}</div>
+                    </div>
+                    <div class="ml-auto pl-3">
+                        <button type="button" class="inline-flex text-gray-400 hover:text-gray-500 focus:outline-none" onclick="this.parentElement.parentElement.parentElement.remove()">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(notificationContainer);
+
+            // 5초 후 자동으로 알림 제거
+            setTimeout(() => {
+                notificationContainer.remove();
+            }, 3000);
+        }
     </script>
 </th:block>
+</html>

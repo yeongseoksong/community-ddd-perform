@@ -1,3 +1,4 @@
+
 class MyUploadAdapter {
     constructor(loader) {
         this.loader = loader;
@@ -8,16 +9,15 @@ class MyUploadAdapter {
             return new Promise((resolve, reject) => {
                 const data = new FormData();
                 data.append('upload', file);
-//                data.append('author', 'user123'); // 👈 원하는 body 추가
-
-                fetch('/api/resources', {
+                const postId= extractPostIdByDom();
+                fetch(`/api/members/posts/${postId}/resources`, {
                     method: 'POST',
                     body: data,
                 })
                     .then(response => response.json())
                     .then(result => {
                         resolve({
-                            default: result.url // 👈 이미지 경로 반환
+                            default: result.data.url // 👈 이미지 경로 반환
                         });
                     })
                     .catch(err => {

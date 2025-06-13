@@ -1,14 +1,50 @@
+<nav th:fragment="HeaderFragment" class="bg-white border-b border-gray-200 shadow fixed top-0 left-0 w-full z-50">
+    <div class="container mx-auto px-4 py-3">
+        <div class="flex justify-between items-center">
+            <!-- 로고 -->
+            <div class="flex-shrink-0">
+                <a href="/" class="flex items-center">
+                    <svg class="h-8 w-8 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 9H9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15 9H15.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="ml-2 text-xl font-bold text-gray-900 dark:text-white">COMMUNITY</span>
+                </a>
+            </div>
 
+            <!-- 중앙: 카테고리 및 검색창 -->
+            <div class="hidden md:flex items-center justify-between flex-1 ml-10">
+                <!-- 카테고리 리스트 -->
+                <ul id="categoryList" class="flex space-x-6 text-gray-700 dark:text-gray-300">
+                    <!-- 동적 카테고리 항목 삽입 -->
+                </ul>
 
-<nav th:fragment="HeaderFragment"
-     class="fixed top-0 left-0 w-full bg-white border-b border-gray-200 dark:bg-gray-900 shadow z-50">
-    <div class="max-w-screen-xl mx-auto flex items-center justify-between p-4">
-        <a href="/" class="text-xl font-semibold text-gray-900 dark:text-white">COMMUNITY</a>
-        <ul id="categoryList" class="flex space-x-6 text-gray-700 dark:text-gray-300">
-            <!-- 카테고리 항목들 여기에 동적 삽입 -->
-        </ul>
+                <!-- 검색창 -->
+                <div class="relative mx-4 flex-1 max-w-xs">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <input type="text" placeholder="검색..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out">
+                </div>
+            </div>
+
+            <!-- 오른쪽: 사용자 메뉴 -->
+            <div class="flex items-center">
+                <div class="flex items-center">
+                    <a th:if="${session.user}" href="/mypage" class="flex items-center text-gray-700 hover:text-blue-600">
+                        <span class="mr-2" th:text="${session.user.name}">사용자명</span>
+                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                            <img th:if="${session.user?.profileImage}" th:src="${session.user?.profileImage}" alt="프로필" class="w-full h-full object-cover">
+                            <span th:unless="${session.user?.profileImage}" class="text-gray-500">👤</span>
+                        </div>
+                    </a>
+                    <a th:unless="${session.user}" href="/login" class="text-gray-700 hover:text-blue-600 ml-4">로그인</a>
+                </div>
+            </div>
+        </div>
     </div>
 </nav>
-
-
-
