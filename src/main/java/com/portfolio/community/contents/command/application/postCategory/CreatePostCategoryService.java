@@ -20,7 +20,6 @@ import java.util.List;
 @Transactional
 public class CreatePostCategoryService {
 
-    private final GetCategoryService getCategoryService;
     private final PostResourceRepository postResourceRepository;
 
 

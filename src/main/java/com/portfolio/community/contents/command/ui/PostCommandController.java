@@ -13,8 +13,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -59,14 +61,15 @@ public class PostCommandController {
     }
 
 
-    @PutMapping("/api/members/posts/{postId}")
+    @PutMapping(value = "/api/members/posts/{postId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "게시글 편집 api")
     public Resp<Post> editPost(
             @PathVariable Long postId,
-            @RequestBody @Valid PostRequest postRequest) {
+            @RequestPart(value="post-payload") @Valid PostRequest postPayload,
+            @RequestPart(value="attachments",required = false) List<MultipartFile> attachments) {
 
         PostId postId_ = new PostId(postId);
-        return Resp.ok(editPostService.editPost(postId_, author,postRequest));
+        return Resp.ok(editPostService.editPost(postId_, author,postPayload,attachments));
     }
 
 

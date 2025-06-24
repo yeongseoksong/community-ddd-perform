@@ -28,27 +28,11 @@ public class CreatePostService {
     public Post createInitialPost(Author author, CategoryId categoryId) {
 
         Category category = getCategoryService.getById(categoryId);
-
         Post post =  new Post(author,categoryId);
 
         return postRepository.save(post);
     }
 
 
-    public Post createPost(Author author, PostRequest postRequest, List<MultipartFile> attachments) {
-
-        Category category = getCategoryService.getById(postRequest.getCategoryId());
-        PostContent postContent = new PostContent(postRequest.getTitle(), postRequest.getContent());
-        Post post =  new Post(author,postContent,category.getId(), postRequest.getIsPremium());
-        Post save = postRepository.save(post);
-        if(attachments==null || attachments.isEmpty()){
-           return save;
-        }
-
-        List<Resource> resources = persistResourceService.persistMultipartFiles(attachments);
-        createPostCategoryService.mappingPostAndResources(post,resources);
-
-        return save;
-    }
 
 }

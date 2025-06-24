@@ -16,7 +16,8 @@ public class PostDetailVO {
     String title;
     String content;
     String categoryId;
+    String categoryName;
     String authorName;
     String status;
-    List<AttachmentSummaryVo> attachments;
+    List<AttachmentSummaryVO> attachments;
 }

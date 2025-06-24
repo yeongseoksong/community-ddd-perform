@@ -1,12 +1,13 @@
 package com.portfolio.community.contents.query;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-public class AttachmentSummaryVo {
+public class AttachmentSummaryVO {
 
     String resourceId;
+    String fileName;
     String url;
     String resourceType;
+    
 }

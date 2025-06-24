@@ -26,5 +26,8 @@ logging:
       springframework:
         security: DEBUG
       hibernate.type.descriptor.sql.BasicBinder: TRACE # 바인딩 값 로그
+      mybatis: DEBUG           # MyBatis 로그
+      mybatis.spring: DEBUG
+      java.sql: DEBUG
 server:
   port: 8080 # 개발 서버 포트

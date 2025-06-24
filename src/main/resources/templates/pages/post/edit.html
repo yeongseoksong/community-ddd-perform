@@ -171,32 +171,6 @@
             return form.categoryId.value;
         }
 
-        // 게시물 저장 함수
-<!--        function savePost(postId, content) {-->
-<!--            const form = document.getElementById('postForm');-->
-<!--            const formData = new FormData();-->
-
-<!--            formData.append('title', form.title.value);-->
-<!--            formData.append('content', content);-->
-<!--            formData.append('isPremium', form.isPremium.checked);-->
-
-<!--            // 파일 추가-->
-<!--            const fileInput = document.getElementById('fileInput');-->
-<!--            if (fileInput.files.length > 0) {-->
-<!--                for (let i = 0; i < fileInput.files.length; i++) {-->
-<!--                    formData.append('files', fileInput.files[i]);-->
-<!--                }-->
-<!--            }-->
-
-<!--            return fetch(`/api/members/posts/${postId}`, {-->
-<!--                method: 'PUT',-->
-<!--                body: formData-->
-<!--            })-->
-<!--            .then(response => {-->
-<!--                if (!response.ok) throw new Error('저장 실패');-->
-<!--                return response.json();-->
-<!--            });-->
-<!--        }-->
 
         // CKEditor 초기화
         ClassicEditor
@@ -216,7 +190,8 @@
                 const postId = form.postId.value;
                 const categoryId = extractCategoryId();
 
-                savePost(postId, editorInstance.getData())
+                 const fileInput = document.getElementById('fileInput');
+                 savePost(postId, editorInstance.getData(),fileInput)
                     .then(() => {
                         // 저장 후 등록 요청
                         return fetch(`/api/members/posts/${postId}/publish`, {
@@ -234,7 +209,7 @@
                         showNotification('성공', '게시물이 성공적으로 등록되었습니다!', 'success');
                         setTimeout(() => {
                             window.location.href = `/categories/${categoryId}/posts`;
-                        }, 1500);
+                        }, 300);
                     })
                     .catch(error => {
                         console.error(error);
@@ -247,8 +222,9 @@
         document.getElementById('editBtn').addEventListener('click', function () {
             const form = document.getElementById('postForm');
             const postId = form.postId.value;
+            const fileInput = document.getElementById('fileInput');
 
-            savePost(postId, editorInstance.getData())
+            savePost(postId, editorInstance.getData(),fileInput)
                 .then(() => {
                     showNotification('성공', '게시물이 저장되었습니다.', 'success');
                 })
@@ -256,39 +232,6 @@
                     showNotification('오류', '오류 발생: ' + error.message, 'error');
                 });
         });
-
-        // 알림 표시 함수
-        function showNotification(title, message, type) {
-            const notificationContainer = document.createElement('div');
-            notificationContainer.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${type === 'success' ? 'bg-green-100 border-l-4 border-green-500' : 'bg-red-100 border-l-4 border-red-500'}`;
-
-            notificationContainer.innerHTML = `
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        ${type === 'success'
-                            ? '<svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
-                            : '<svg class="w-5 h-5 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>'
-                        }
-                    </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium ${type === 'success' ? 'text-green-700' : 'text-red-700'}">${title}</h3>
-                        <div class="mt-1 text-sm ${type === 'success' ? 'text-green-600' : 'text-red-600'}">${message}</div>
-                    </div>
-                    <div class="ml-auto pl-3">
-                        <button type="button" class="inline-flex text-gray-400 hover:text-gray-500 focus:outline-none" onclick="this.parentElement.parentElement.parentElement.remove()">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            document.body.appendChild(notificationContainer);
-
-            // 5초 후 자동으로 알림 제거
-            setTimeout(() => {
-                notificationContainer.remove();
-            }, 3000);
-        }
     </script>
 </th:block>
 </html>

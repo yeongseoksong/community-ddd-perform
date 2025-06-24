@@ -21,11 +21,6 @@ public class DefaultResource  extends  Resource{
 
     @Override
     protected boolean isSupportContentType(String contentType) {
-         return contentType != null &&
-                (contentType.equals("application/json") ||
-                        contentType.equals("application/xml") ||
-                        contentType.equals("text/html")||
-                        contentType.equals("text/plain")||
-                        contentType.equals("application/octet-stream"));
+        return !contentType.startsWith("image/");
     }
 }

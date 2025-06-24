@@ -20,8 +20,8 @@ spring:
     open-in-view: false
   servlet:
     multipart:
-      max-request-size: 10MB
-      max-file-size: 5MB
+      max-request-size: 15MB
+      max-file-size: 10MB
 
 jwt:
   key: your-very-secret-jwt-key-which-should-be-long-enough123213sadasccxvxcvsad
