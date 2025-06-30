@@ -1,6 +1,7 @@
 package com.portfolio.community.contents.query;
 
 
+import com.portfolio.community.common.Pagination;
 import com.portfolio.community.contents.command.application.category.GetCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,7 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -19,6 +22,9 @@ import java.util.Set;
 public class PostQueryService {
 
     private final PostMapper postMapper;
+
+    public static final int pageSize=10;
+    public static final int navSize=5;
 
     public List<PostSummaryVO> fetchPostsByCategory(String categoryId, Pageable pageable) {
         int pageSize=pageable.getPageSize();
@@ -43,5 +49,32 @@ public class PostQueryService {
         }
 
         return content;
+    }
+
+    public Map<String, Object> fetchPostsByCategoryWithPage(String categoryId, Pageable pageable) {
+
+        List<PostSummaryVO> posts = fetchPostsByCategory(categoryId, pageable);
+
+        long totalCount = postMapper.countPostsByCategoryId(categoryId);
+        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+        int currentPage = pageable.getPageNumber();
+
+        int startNav = (currentPage  / navSize) * navSize + 1;
+        int endNav = Math.min(startNav + navSize - 1, totalPages);
+
+
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(currentPage);
+        pagination.setTotalPages(totalPages);
+        pagination.setStartNav(startNav);
+        pagination.setEndNav(endNav);
+        pagination.setHasPrev(startNav > 1);
+        pagination.setHasNext(endNav < totalPages);
+
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("posts", posts);
+        result.put("pagination", pagination);
+        return result;
     }
 }

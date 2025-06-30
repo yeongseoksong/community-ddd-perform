@@ -3,6 +3,7 @@ package com.portfolio.community.presentation;
 import com.portfolio.community.contents.command.application.category.GetCategoryService;
 import com.portfolio.community.contents.command.application.post.CreatePostService;
 import com.portfolio.community.contents.command.application.post.GetPostService;
+import com.portfolio.community.contents.command.domain.category.Category;
 import com.portfolio.community.contents.command.domain.category.CategoryId;
 import com.portfolio.community.contents.command.domain.post.Author;
 import com.portfolio.community.contents.command.domain.post.Post;
@@ -13,7 +14,6 @@ import com.portfolio.community.contents.query.PostQueryService;
 import com.portfolio.community.contents.query.PostSummaryVO;
 import com.portfolio.community.member.command.domain.MemberId;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -37,28 +37,31 @@ public class PostController {
 
     final Author author = new Author(MemberId.of("test"), "test");
 
-    final int pageSize=10;
+
 
     @GetMapping()
     public String postListPerCategory(
 
             @PathVariable String categoryId,
-                                      @PageableDefault(page = 0,size=pageSize
+                                      @PageableDefault(page = 0,size=PostQueryService.pageSize
                                       ) Pageable pageable, Model model) {
 
 
         Pageable fixedPageable = PageRequest.of(
                 pageable.getPageNumber(),
-                pageSize,
+                PostQueryService.pageSize,
                 pageable.getSort()
         );
-        List<PostSummaryVO> posts = postQueryService.fetchPostsByCategory(categoryId,fixedPageable);
-        long postCount = postMapper.countPostsByCategoryId(categoryId);
-        int totalPages = (int) Math.ceil((double) postCount / pageSize);
+
+        Category category = getCategoryService.getById(new CategoryId(categoryId));
+        List<PostSummaryVO> posts = postQueryService.fetchPostsByCategoryWithPage(categoryId,fixedPageable);
+//        long postCount = postMapper.countPostsByCategoryId(categoryId);
+//        int totalPages = (int) Math.ceil((double) postCount / pageSize);
         int currentPage = pageable.getPageNumber();
 
         model.addAttribute("posts",posts);
-        model.addAttribute("postsCount",postCount);
+        model.addAttribute("categoryName",category.getName());
+        model.addAttribute("categoryDesc",category.getDescription());
         model.addAttribute("pageSize",pageSize);
         model.addAttribute("totalPages",totalPages);
         model.addAttribute("currentPage",currentPage);
@@ -66,7 +69,7 @@ public class PostController {
     }
 //
     @GetMapping("/{postId}")
-    public String postDetail(@PathVariable Long postId,Model model) {
+    public String postDetail(@PathVariable Long postId, Model model) {
         PostDetailVO postWithResources = postMapper.getPostWithResources(postId);
         model.addAttribute("post",postWithResources);
         return "pages/post/detail";

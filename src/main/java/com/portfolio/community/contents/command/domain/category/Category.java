@@ -19,20 +19,25 @@ public class Category extends BaseEntity {
     @Column(nullable = false, unique = true,length = 50)
     private String name;
 
-    private Category(CategoryId id, String name) {
+
+    @Column(nullable = true)
+    private String description;
+
+    private Category(CategoryId id, String name,String description) {
         if(id==null||name==null) {
             throw new IllegalArgumentException("id and name can't be null");
         }
 
         this.id = id;
         this.name = name;
+        this.description = description;
     }
 
     public Category(String name) {
-        this(new CategoryId(), name);
+        this(new CategoryId(), name,null);
     }
 
     public static Category of(CategoryId id, String name) {
-        return new Category(id, name);
+        return new Category(id, name,null);
     }
 }
