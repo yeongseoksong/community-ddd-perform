@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/categories/{categoryId}/posts")
@@ -46,7 +47,6 @@ public class PostController {
                                       @PageableDefault(page = 0,size=PostQueryService.pageSize
                                       ) Pageable pageable, Model model) {
 
-
         Pageable fixedPageable = PageRequest.of(
                 pageable.getPageNumber(),
                 PostQueryService.pageSize,
@@ -54,20 +54,20 @@ public class PostController {
         );
 
         Category category = getCategoryService.getById(new CategoryId(categoryId));
-        List<PostSummaryVO> posts = postQueryService.fetchPostsByCategoryWithPage(categoryId,fixedPageable);
-//        long postCount = postMapper.countPostsByCategoryId(categoryId);
-//        int totalPages = (int) Math.ceil((double) postCount / pageSize);
-        int currentPage = pageable.getPageNumber();
 
-        model.addAttribute("posts",posts);
+        Map<String, Object> posts = postQueryService.fetchPostsByCategoryWithPage(categoryId,fixedPageable);
+
+
+        model.addAttribute("posts",posts.get("posts"));
         model.addAttribute("categoryName",category.getName());
         model.addAttribute("categoryDesc",category.getDescription());
-        model.addAttribute("pageSize",pageSize);
-        model.addAttribute("totalPages",totalPages);
-        model.addAttribute("currentPage",currentPage);
+        model.addAttribute("pagination",posts.get("pagination"));
+
+
         return "pages/post/list";
     }
-//
+
+
     @GetMapping("/{postId}")
     public String postDetail(@PathVariable Long postId, Model model) {
         PostDetailVO postWithResources = postMapper.getPostWithResources(postId);
@@ -75,11 +75,13 @@ public class PostController {
         return "pages/post/detail";
     }
 
+
     @GetMapping("/init")
     public String createPost(@PathVariable String categoryId){
         Post initialPost = createPostService.createInitialPost(author, new CategoryId(categoryId));
         return "redirect:/categories/"+categoryId+"/posts/"+initialPost.getId().getValue()+"/edit";
     }
+
 
     @GetMapping("/{postId}/edit")
     public String editPost(@PathVariable String categoryId,@PathVariable Long postId, Model model){

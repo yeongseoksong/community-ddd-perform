@@ -23,7 +23,7 @@ public class PostQueryService {
 
     private final PostMapper postMapper;
 
-    public static final int pageSize=10;
+    public static final int pageSize=5;
     public static final int navSize=5;
 
     public List<PostSummaryVO> fetchPostsByCategory(String categoryId, Pageable pageable) {
@@ -56,20 +56,10 @@ public class PostQueryService {
         List<PostSummaryVO> posts = fetchPostsByCategory(categoryId, pageable);
 
         long totalCount = postMapper.countPostsByCategoryId(categoryId);
-        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
         int currentPage = pageable.getPageNumber();
 
-        int startNav = (currentPage  / navSize) * navSize + 1;
-        int endNav = Math.min(startNav + navSize - 1, totalPages);
 
-
-        Pagination pagination = new Pagination();
-        pagination.setCurrentPage(currentPage);
-        pagination.setTotalPages(totalPages);
-        pagination.setStartNav(startNav);
-        pagination.setEndNav(endNav);
-        pagination.setHasPrev(startNav > 1);
-        pagination.setHasNext(endNav < totalPages);
+        Pagination pagination = new Pagination(totalCount, currentPage, pageSize, navSize );
 
 
         Map<String, Object> result = new HashMap<>();
