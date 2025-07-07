@@ -1,4 +1,4 @@
-package com.portfolio.community.contents.command.ui;
+package com.portfolio.community.contents.command.presentation;
 
 
 import com.portfolio.community.common.response.Resp;
@@ -9,11 +9,9 @@ import com.portfolio.community.contents.command.domain.category.CategoryReposito
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package com.portfolio.community.contents.command.ui;
+package com.portfolio.community.contents.command.presentation;
 
 
 import com.portfolio.community.common.response.Resp;

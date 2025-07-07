@@ -1,4 +1,4 @@
-package com.portfolio.community.presentation;
+package com.portfolio.community.view;
 
 
 import org.springframework.stereotype.Controller;

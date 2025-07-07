@@ -1,4 +1,4 @@
-package com.portfolio.community.presentation;
+package com.portfolio.community.view;
 
 import com.portfolio.community.contents.command.application.category.GetCategoryService;
 import com.portfolio.community.contents.command.application.post.CreatePostService;
@@ -11,8 +11,12 @@ import com.portfolio.community.contents.command.domain.post.PostId;
 import com.portfolio.community.contents.query.PostDetailVO;
 import com.portfolio.community.contents.query.PostMapper;
 import com.portfolio.community.contents.query.PostQueryService;
-import com.portfolio.community.contents.query.PostSummaryVO;
 import com.portfolio.community.member.command.domain.MemberId;
+import com.portfolio.community.reaction.application.GetReactionService;
+import com.portfolio.community.reaction.domain.Reaction;
+import com.portfolio.community.reaction.domain.ReactionRepository;
+import com.portfolio.community.reaction.domain.ReactorId;
+import com.portfolio.community.reaction.domain.TargetId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +26,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/categories/{categoryId}/posts")
@@ -33,11 +37,9 @@ public class PostController {
     private final CreatePostService createPostService;
     private final GetPostService getPostService;
     private final PostMapper postMapper;
-
     private final PostQueryService postQueryService;
-
+    private final GetReactionService getReactionService;
     final Author author = new Author(MemberId.of("test"), "test");
-
 
 
     @GetMapping()
@@ -71,7 +73,12 @@ public class PostController {
     @GetMapping("/{postId}")
     public String postDetail(@PathVariable Long postId, Model model) {
         PostDetailVO postWithResources = postMapper.getPostWithResources(postId);
+        ReactorId reactorId = new ReactorId(author.getMemberId());
+
+        Optional<Reaction> myReactionOnPost = getReactionService.findMyReactionOnPost(new TargetId(new PostId(postId)),reactorId);
         model.addAttribute("post",postWithResources);
+        model.addAttribute("reaction",myReactionOnPost);
+
         return "pages/post/detail";
     }
 

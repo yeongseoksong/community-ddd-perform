@@ -21,6 +21,10 @@ public class Pagination {
             throw new  IllegalArgumentException("Pagination currentPage, totalPages, pageSize, navSize  cannot be null");
 
         this.totalPages = (int) Math.ceil((double) totalCount / pageSize)-1;
+
+        if(totalPages<currentPage)
+            throw new PageOverFlowException();
+
         this.currentPage=currentPage;
 
         this.startNav=(this.currentPage / navSize) * navSize;

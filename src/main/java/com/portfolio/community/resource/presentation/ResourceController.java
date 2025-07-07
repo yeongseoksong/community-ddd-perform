@@ -1,4 +1,4 @@
-package com.portfolio.community.resource.ui;
+package com.portfolio.community.resource.presentation;
 
 import com.portfolio.community.common.response.Resp;
 import com.portfolio.community.resource.application.DeleteResourceSerivce;

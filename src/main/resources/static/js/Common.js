@@ -89,4 +89,6 @@ function savePost(postId,content,attachments) {
       if (!res.ok) throw new Error('저장 실패');
       return res.json();
     });
+
+
 }
