@@ -18,7 +18,7 @@ class ReactionRepositoryTest {
     public void existsByReactorIdAndTargetId는_정상동작한다(){
         ReactorId reactorId = new ReactorId(new MemberId());
         TargetId targetId = new TargetId(new PostId(1L));
-        Reaction reaction = new Reaction(ReactionType.Like, reactorId, targetId);
+        Reaction reaction = new Reaction(ReactionType.LIKE, reactorId, targetId);
         Reaction save = reactionRepository.save(reaction);
 
         boolean b = reactionRepository.existsByReactorIdAndTargetId(reactorId, targetId);

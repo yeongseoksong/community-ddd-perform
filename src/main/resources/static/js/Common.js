@@ -58,7 +58,6 @@ function saveResource(postId,file){
     });
 }
 
-
 function savePost(postId,content,attachments) {
     const form = document.getElementById('postForm');
     if(!form) throw new Error("");

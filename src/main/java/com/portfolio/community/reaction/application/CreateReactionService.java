@@ -20,7 +20,7 @@ public class CreateReactionService {
         boolean b = reactionRepository.existsByReactorIdAndTargetId(reactorId, targetId);
         if(b) throw new AlreadyReactionException();
 
-        if(reactionType.equals(ReactionType.Like))
+        if(reactionType.equals(ReactionType.LIKE))
             post.incrementLikeCount();
         else
             post.incrementDislikeCount();
