@@ -19,7 +19,7 @@ public class PostContent {
     @Column
     private String title;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     public PostContent(String title, String content) {

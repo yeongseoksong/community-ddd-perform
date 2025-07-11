@@ -53,4 +53,16 @@
                 });
         };
     </script>
+
+    <script>
+        document.getElementById('nav-search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value.trim();
+                if (searchTerm) {
+                    window.location.href = `/search?keyword=${encodeURIComponent(searchTerm)}`;
+                }
+            }
+        });
+    </script>
+
 </html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.portfolio.community.search.SearchMapper">
+    <select id="searchPosts" resultType="com.portfolio.community.search.SearchResultVO">
+        SELECT *
+        FROM post
+        WHERE MATCH(title, content,author_name) AGAINST(#{keyword} IN NATURAL LANGUAGE MODE)
+        order by post_id desc
+        limit #{offset}, #{pageSize};
+
+
+    </select>
+
+    <select id="countSearchPosts" resultType="long">
+        SELECT count(*)
+        FROM post
+        WHERE MATCH(title, content,author_name) AGAINST(#{keyword} IN NATURAL LANGUAGE MODE)
+    </select>
+
+</mapper>

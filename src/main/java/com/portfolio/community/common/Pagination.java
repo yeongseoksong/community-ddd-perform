@@ -15,14 +15,16 @@ public class Pagination {
     private Boolean hasPrev =true;
     private Boolean hasNext =true;
 
+    public static final int pageSize=5;
+    public static final int navSize=5;
 
-    public Pagination(Long totalCount, Integer currentPage ,Integer pageSize,Integer navSize){
-        if(currentPage == null || currentPage==null || pageSize ==null || navSize==null  )
-            throw new  IllegalArgumentException("Pagination currentPage, totalPages, pageSize, navSize  cannot be null");
+    public Pagination(Long totalCount, Integer currentPage ){
+        if(currentPage == null || currentPage==null  )
+            throw new  IllegalArgumentException("Pagination currentPage, totalPages  cannot be null");
 
         this.totalPages = (int) Math.ceil((double) totalCount / pageSize)-1;
 
-        if(totalPages<currentPage)
+        if(currentPage!=0 && totalPages<currentPage)
             throw new PageOverFlowException();
 
         this.currentPage=currentPage;

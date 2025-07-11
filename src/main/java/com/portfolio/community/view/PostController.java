@@ -1,5 +1,6 @@
 package com.portfolio.community.view;
 
+import com.portfolio.community.common.Pagination;
 import com.portfolio.community.contents.command.application.category.GetCategoryService;
 import com.portfolio.community.contents.command.application.post.CreatePostService;
 import com.portfolio.community.contents.command.application.post.GetPostService;
@@ -46,12 +47,12 @@ public class PostController {
     public String postListPerCategory(
 
             @PathVariable String categoryId,
-                                      @PageableDefault(page = 0,size=PostQueryService.pageSize
+                                      @PageableDefault(page = 0,size= Pagination.pageSize
                                       ) Pageable pageable, Model model) {
 
         Pageable fixedPageable = PageRequest.of(
                 pageable.getPageNumber(),
-                PostQueryService.pageSize,
+                Pagination.pageSize,
                 pageable.getSort()
         );
 
