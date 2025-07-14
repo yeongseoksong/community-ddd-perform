@@ -116,26 +116,27 @@
         </div>
 
         <!-- 페이지네이션 -->
-        <div class="flex justify-center mt-8">
-            <nav aria-label="Page navigation">
-                <ul class="inline-flex -space-x-px text-sm">
-                    <li th:if="${pagination.hasPrev}">
-                        <a href="javascript:void(0)" th:onclick="|goToPage(${pagination.startNav-1})|" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500border border  border-gray-300 rounded-s-lg "> < </a>
-                    </li>
+        <div th:if="${posts.size()!=0}" class="flex justify-center mt-8">
 
-                    <li th:each="i : ${#numbers.sequence(pagination.startNav, pagination.endNav)}">
-                        <a href="javascript:void(0)"  th:onclick="|goToPage(${i})|"
-                           class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 border  border-gray-300  "
-                           th:classappend="${i == pagination.currentPage} ? 'bg-blue-500 text-white' : 'bg-white text-gray-500'"
-                         >
-                            <span th:text="${i + 1}"></span>
-                        </a>
-                    </li>
-                    <li th:if="${pagination.hasNext}">
-                        <a href="javascript:void(0)" th:onclick="|goToPage(${pagination.endNav+1})|" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 border border-gray-300 rounded-e-lg "> > </a>
-                    </li>
-                </ul>
-            </nav>
+            <nav aria-label="Page navigation">
+                    <ul class="inline-flex -space-x-px text-sm">
+                        <li th:if="${pagination.hasPrev}">
+                            <a href="javascript:void(0)" th:onclick="|goToPage(${pagination.startNav-1})|" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500border border  border-gray-300 rounded-s-lg "> < </a>
+                        </li>
+
+                        <li th:each="i : ${#numbers.sequence(pagination.startNav, pagination.endNav)}">
+                            <a href="javascript:void(0)"  th:onclick="|goToPage(${i})|"
+                               class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 border  border-gray-300  "
+                               th:classappend="${i == pagination.currentPage} ? 'bg-blue-500 text-white' : 'bg-white text-gray-500'"
+                             >
+                                <span th:text="${i + 1}"></span>
+                            </a>
+                        </li>
+                        <li th:if="${pagination.hasNext}">
+                            <a href="javascript:void(0)" th:onclick="|goToPage(${pagination.endNav+1})|" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 border border-gray-300 rounded-e-lg "> > </a>
+                        </li>
+                    </ul>
+                </nav>
         </div>
     </div>
 

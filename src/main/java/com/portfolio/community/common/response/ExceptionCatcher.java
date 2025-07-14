@@ -1,64 +1,40 @@
 package com.portfolio.community.common.response;
 
 
-
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import javax.naming.AuthenticationException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
-@RestControllerAdvice
-// 예외 처리용 Class
+@ControllerAdvice(basePackages = "com.portfolio.community.view")
 public class ExceptionCatcher {
 
 
 
-
-    @ExceptionHandler(value = {AuthenticationException.class})
-    public ResponseEntity<?> handleAuthenticationException(AuthenticationException e) {
-        log.error("handleAuthenticationException() in GlobalExceptionHandler throw CustomException : {}", e.getMessage());
-        return  new ResponseEntity<>(Resp.fail(e),HttpStatus.UNAUTHORIZED );
-    }
-
-    
-//    @ExceptionHandler(value = {AccessDeniedException.class})
-//    public ResponseEntity<?> handleAuthorizationException(AccessDeniedException e) {
-//        log.error("handleAuthorizationException() in GlobalExceptionHandler throw CustomException : {}", e.getMessage());
-//        return  new ResponseEntity<>(Resp.fail(new AuthorizationException()),HttpStatus.UNAUTHORIZED );
-//    }
-
-
-    // 커스텀 예외
     @ExceptionHandler(value = {MotherException.class})
-    public ResponseEntity<?> handleCustomException(MotherException e) {
-        log.error("handleCustomException() in GlobalExceptionHandler throw CustomException : {}", e.getMessage());
-        // 예외 정보랑 HTTP Status 같이 반환
-        return  new ResponseEntity<>(Resp.fail(e),e.getHttpStatus() );
+    public String handleCustomException(MotherException e,HttpServletRequest request, Model model) {
+        log.error(e.getMessage(), e);
+        model.addAttribute("errorMessage", e.getMessage());
+
+        return "error/400";
+
     }
 
 
-    // 기본 예외(커스텀 제외)
-    @ExceptionHandler(value = {RuntimeException.class,Exception.class})
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<?> handleException(Exception e) {
-        log.error("handleException() in GlobalExceptionHandler throw Exception : {}", e.getMessage());
-        e.printStackTrace();
+    @ExceptionHandler(Exception.class)
+    public String handleException(Exception ex, HttpServletRequest request, Model model) {
 
-        // 일반 예외를 MotherException으로 변환
-        MotherException motherException;
-        if(e instanceof RuntimeException){
-             motherException = new MotherException(e.getMessage(), HttpStatus.BAD_REQUEST);
+        model.addAttribute("errorMessage", "서버 오류가 발생했습니다.");
+        return "error/500";
         }
-        else{
-         motherException = new MotherException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-//        e.printStackTrace();
-        return new ResponseEntity<>(Resp.fail(motherException), motherException.getHttpStatus());
-    }
 
 
 }

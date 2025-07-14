@@ -104,7 +104,7 @@
         </div>
 
         <!-- 페이지네이션 -->
-        <div class="flex justify-center mt-8">
+        <div th:if="${posts.size()!=0}" class="flex justify-center mt-8">
             <nav aria-label="Page navigation">
                 <ul class="inline-flex -space-x-px text-sm">
                     <li th:if="${pagination.hasPrev}">
