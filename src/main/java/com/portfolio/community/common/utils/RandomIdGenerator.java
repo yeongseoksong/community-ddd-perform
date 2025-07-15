@@ -9,4 +9,11 @@ public class RandomIdGenerator {
                 NanoIdUtils.DEFAULT_ALPHABET,
                 8);
     }
+
+    public static String generate(Integer length){
+        return NanoIdUtils.randomNanoId(
+                NanoIdUtils.DEFAULT_NUMBER_GENERATOR,
+                NanoIdUtils.DEFAULT_ALPHABET,
+                length);
+    }
 }
