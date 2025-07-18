@@ -9,7 +9,7 @@ mybatis:
 spring:
   profiles:
     active: dev
-    include: storage,thymeleaf
+    include: storage,thymeleaf, toss
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:

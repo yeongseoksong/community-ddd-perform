@@ -1,0 +1,5 @@
+payments:
+  toss:
+    secret-key: test_sk_24xLea5zVAkbALY11m9Y8QAMYNwW
+    base-url: https://api.tosspayments.com/v1/payments
+    confirm-endpoint: /confirm
