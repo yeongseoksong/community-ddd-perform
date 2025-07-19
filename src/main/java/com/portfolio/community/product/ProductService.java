@@ -1,9 +1,10 @@
-package com.portfolio.community.order.product;
+package com.portfolio.community.product;
 
 
 import com.portfolio.community.common.entity.Month;
 import com.portfolio.community.common.entity.Won;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +23,8 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public List<Product> findAllProducts() {
-        return productRepository.findAll();
+    public List<Product> findAllSortByAmount() {
+        return productRepository.findAll(Sort.by(Sort.Direction.ASC,"amount"));
     }
 
 

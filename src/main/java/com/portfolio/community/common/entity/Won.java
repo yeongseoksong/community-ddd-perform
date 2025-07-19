@@ -3,12 +3,14 @@ package com.portfolio.community.common.entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
+@Getter
 public class Won {
     private Long value;
 

@@ -1,17 +1,18 @@
-package com.portfolio.community.subscribe.domain;
+package com.portfolio.community.subscribe.domain.subscribe.domain;
 
 
 import com.portfolio.community.common.utils.RandomIdGenerator;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @Embeddable
 @Getter
 public class SubscribeId {
+
+    @Column(name="subscribe_id")
     private String value;
 
 

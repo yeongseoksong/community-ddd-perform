@@ -1,4 +1,4 @@
-package com.portfolio.community.subscribe.application;
+package com.portfolio.community.subscribe.domain.subscribe.application;
 
 
 import lombok.RequiredArgsConstructor;

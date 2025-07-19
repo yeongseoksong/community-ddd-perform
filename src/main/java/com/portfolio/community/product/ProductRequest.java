@@ -1,7 +1,5 @@
-package com.portfolio.community.order.product;
+package com.portfolio.community.product;
 
-import com.portfolio.community.common.entity.Month;
-import com.portfolio.community.common.entity.Won;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

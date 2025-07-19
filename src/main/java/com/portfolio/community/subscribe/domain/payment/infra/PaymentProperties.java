@@ -1,4 +1,4 @@
-package com.portfolio.community.order.payment.infra;
+package com.portfolio.community.subscribe.domain.payment.infra;
 
 
 import lombok.Getter;

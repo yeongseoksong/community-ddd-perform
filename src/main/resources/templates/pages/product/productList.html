@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/defaultLayout}">
+
+
+    <style>
+        .product-card {
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .popular-badge {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .price-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+
+
+    <th:block layout:fragment="Content">
+        <div  class="min-h-screen  py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- 헤더 섹션 -->
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                        구독권 선택
+                    </h1>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                        원하는 구독 기간을 선택하고 프리미엄 서비스를 이용해보세요
+                    </p>
+                </div>
+
+                <!-- 제품 목록 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    <!-- 제품 카드 반복 -->
+                    <div th:if="${products != null and !products.isEmpty()}"
+                         th:each="product : ${products}"
+                         class="product-card relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+
+                        <!-- 인기 배지 (12개월 상품에 표시) -->
+                        <div th:if="${product.amount.value == 12}"
+                             class="popular-badge absolute top-4 right-4 bg-gradient-to-r from-orange-400 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            인기
+                        </div>
+
+                        <!-- 카드 헤더 -->
+                        <div class="p-8 text-center">
+                            <!-- 제품 아이콘 -->
+                            <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+
+                            <!-- 제품명 -->
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2" th:text="${product.name}">
+                                프리미엄 플랜
+                            </h3>
+
+                            <!-- 기간 표시 -->
+                            <div class="text-lg text-gray-600 dark:text-gray-300 mb-4">
+                                <span th:text="${product.amount.value}">12</span>개월
+                            </div>
+
+                            <!-- 가격 표시 -->
+                            <div class="mb-6">
+                                <div class="price-highlight text-4xl font-bold mb-2" th:text="${#numbers.formatInteger(product.price.value, 0, 'COMMA')} + '원'">
+                                    99,000원
+                                </div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400">
+                                    월 <span th:text="${#numbers.formatInteger(product.price.value / product.amount.value, 0, 'COMMA')}">8,250</span>원
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 제품 설명 -->
+                        <div class="px-8 pb-8">
+                            <p class="text-gray-600 dark:text-gray-300 text-center mb-6" th:text="${product.description}">
+                                프리미엄 기능을 모두 이용할 수 있는 구독권입니다.
+                            </p>
+
+                            <!-- 혜택 목록 -->
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center text-sm text-gray-600 dark:text-gray-300">
+                                    <svg class="w-4 h-4 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    모든 프리미엄 콘텐츠 이용
+                                </li>
+                                <li class="flex items-center text-sm text-gray-600 dark:text-gray-300">
+                                    <svg class="w-4 h-4 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    광고 없는 깔끔한 환경
+                                </li>
+                                <li class="flex items-center text-sm text-gray-600 dark:text-gray-300">
+                                    <svg class="w-4 h-4 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    우선 고객 지원
+                                </li>
+                                <li class="flex items-center text-sm text-gray-600 dark:text-gray-300">
+                                    <svg class="w-4 h-4 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span th:if="${product.amount.value >= 12}">할인 혜택 제공</span>
+                                    <span th:unless="${product.amount.value >= 12}">기본 혜택</span>
+                                </li>
+                            </ul>
+
+                            <!-- 구매 버튼 -->
+                            <form th:action="@{/payments/toss}" method="get">
+                                <input type="hidden" name="productId" th:value="${product.id.value}" />
+                                <button type="submit"
+                                        class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700
+                   text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200
+                   transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                                    지금 구매하기
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- 할인 표시 (36개월 상품) -->
+                        <div th:if="${product.amount.value == 12}"
+                             class="absolute top-0 left-0 bg-red-500 text-white px-3 py-1 text-xs font-semibold transform -rotate-45 -translate-x-3 translate-y-4">
+                            최대할인
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</th:block>
+</html>

@@ -1,4 +1,4 @@
-package com.portfolio.community.subscribe.domain;
+package com.portfolio.community.subscribe.domain.subscribe.domain;
 
 
 import com.portfolio.community.member.command.domain.MemberId;

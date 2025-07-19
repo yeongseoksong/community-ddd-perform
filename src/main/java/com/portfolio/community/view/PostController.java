@@ -40,6 +40,8 @@ public class PostController {
     private final PostMapper postMapper;
     private final PostQueryService postQueryService;
     private final GetReactionService getReactionService;
+
+    //TODO security 로 변경
     final Author author = new Author(MemberId.of("test"), "test");
 
 

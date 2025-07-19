@@ -1,7 +1,6 @@
-package com.portfolio.community.order.product;
+package com.portfolio.community.product;
 
 import com.portfolio.community.common.response.Resp;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/products")
-public class ProductController {
+public class ProductRestController {
     private final ProductService productService;
 
     @PostMapping
@@ -26,7 +25,7 @@ public class ProductController {
 
     @GetMapping
     public Resp<List<Product>> getAllProducts() {
-        return Resp.ok(productService.findAllProducts());
+        return Resp.ok(productService.findAllSortByAmount());
     }
 
 
