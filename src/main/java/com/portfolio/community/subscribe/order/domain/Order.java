@@ -2,7 +2,9 @@ package com.portfolio.community.subscribe.order.domain;
 
 import com.portfolio.community.common.entity.BaseEntity;
 import com.portfolio.community.common.entity.Won;
+import com.portfolio.community.common.event.EventsUtil;
 import com.portfolio.community.subscribe.payment.infra.ConfirmPaymentResponse;
+import com.portfolio.community.subscribe.subscribe.domain.CreateSubscribeEvent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -47,9 +49,18 @@ public class Order extends BaseEntity {
         if(!(this.state.equals(OrderState.PENDING)))
             throw new IllegalStateException("Order cannot be approved");
 
-        if(confirmPaymentResponse.getStatus().isSuccess()) this.state=OrderState.APPROVED;
-        else this.state=OrderState.FAIL;
+        if(confirmPaymentResponse.getStatus().isSuccess()){
+            this.state=OrderState.APPROVED;
+            EventsUtil.raise(new CreateSubscribeEvent(this));
+        }
+        else {
+            this.state=OrderState.FAIL;
+        }
+    }
 
+
+    public boolean isApproved(){
+        return this.state.equals(OrderState.APPROVED);
     }
 
 }

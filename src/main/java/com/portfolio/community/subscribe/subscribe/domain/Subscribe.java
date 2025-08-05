@@ -24,14 +24,16 @@ public class Subscribe extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SubscribeState state;
 
+
     public Subscribe( SubscriberInfo subscriberInfo, Period period) {
         if (subscriberInfo == null || period == null) {
             throw new IllegalArgumentException("subscriberInfo and startDateTime and endDateTime  are required");
         }
-
+        this.id=new SubscribeId();
         this.subscriberInfo = subscriberInfo;
         this.period = period;
-        this.state= SubscribeState.PENDING;
+        this.state= SubscribeState.ACTIVE;
     }
+
 
 }

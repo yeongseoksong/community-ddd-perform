@@ -30,11 +30,6 @@ public class OrderCommandController {
         return Resp.ok(createOrderService.initOrder(initOrderRequest,orderer));
     }
 
-//    @PostMapping("/api/member/orders/{orderId}")
-//    public Resp<Order> updateOrderAfterPayments(@PathVariable OrderId orderId) {
-//
-//        return Resp.ok(createOrderService.initOrder(initOrderRequest,orderer));
-//
-//    }
+
 
 }

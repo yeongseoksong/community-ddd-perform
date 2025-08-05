@@ -8,16 +8,14 @@ import com.portfolio.community.subscribe.order.application.GetOrderService;
 import com.portfolio.community.subscribe.order.application.InitOrderRequest;
 import com.portfolio.community.subscribe.order.domain.Order;
 import com.portfolio.community.subscribe.order.domain.OrderId;
-import com.portfolio.community.subscribe.order.domain.OrderRepository;
 import com.portfolio.community.subscribe.order.domain.Orderer;
 import com.portfolio.community.subscribe.payment.application.PaymentService;
+import com.portfolio.community.subscribe.payment.domain.PaymentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,7 +30,6 @@ public class PaymentController {
     //TODO security 로 변경
     final Orderer orderer =new Orderer(MemberId.of("test"), "test");
     
-//http://localhost:8080/payments/toss/success?orderId=z9OJUhbvXNAuchTx
 
     @GetMapping("payments/toss")
     public String tossPaymentInitOrder(@RequestParam ProductId productId, Model model) {
@@ -41,15 +38,20 @@ public class PaymentController {
         return "pages/payment/toss";
     }
 
-//    paymentType=NORMAL
-//    &orderId=n2QeWlHu6I5Ljrkt&paymentKey=tgen_20250719214924SBTo2&amount=10000
 
     @GetMapping("payments/toss/success")
     public String tossPaymentSuccess(OrderId orderId, String paymentKey,Long amount,Model model) {
-        Order success = paymentService.success(orderId, paymentKey, amount);
+        try {
+            Order success = paymentService.confirm(orderId, paymentKey, amount);
 
-        model.addAttribute("order",success);
-        return "pages/payment/tossSuccess";
+            model.addAttribute("order", success);
+
+            return "pages/payment/tossSuccess";
+
+        }
+        catch (PaymentException e){
+            return "redirect:/payments/toss/fail?orderId=" + orderId.getValue();
+        }
     }
 
 

@@ -10,11 +10,9 @@ import com.portfolio.community.subscribe.payment.domain.PaymentClient;
 import com.portfolio.community.subscribe.payment.domain.PaymentRepository;
 import com.portfolio.community.subscribe.payment.infra.ConfirmPaymentResponse;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.Update;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
+
 @Service
 public class PaymentService {
 
@@ -24,15 +22,20 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentClient paymentClient;
 
+    public PaymentService(GetOrderService getOrderService, UpdateOrderStatusService updateOrderStatusService, PaymentRepository paymentRepository, PaymentClient paymentClient) {
+        this.getOrderService = getOrderService;
+        this.updateOrderStatusService = updateOrderStatusService;
+        this.paymentRepository = paymentRepository;
+        this.paymentClient = paymentClient;
+    }
 
-
-    public Order success(OrderId orderId,  String paymentKey, Long amount){
+    public Order confirm(OrderId orderId, String paymentKey, Long amount){
         // 1. 주문 정보 조회
         Order order = getOrderService.getByIdIfPermitted(orderId);
         if(order.getState().getIsAccessible())
             return order;
         // 2. 주문 검증
-        order.validatePaymentRequest(orderId,new Won(amount));
+        order.validatePaymentRequest(orderId, new Won(amount));
 
         // 3. 결제 서버 확인
         ConfirmPaymentResponse confirmPaymentResponse = paymentClient.confirm(orderId, paymentKey, amount);
@@ -44,7 +47,5 @@ public class PaymentService {
         return order;
     }
 
-    public void fail(){
 
-    }
 }

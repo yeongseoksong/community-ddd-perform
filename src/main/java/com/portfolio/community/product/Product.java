@@ -45,7 +45,6 @@ public class Product {
 
 
     public Period calcLocalDate(LocalDateTime now){
-
         LocalDateTime endTime = now.plusMonths(this.amount.getValue());
         return new Period(now, endTime);
     }
